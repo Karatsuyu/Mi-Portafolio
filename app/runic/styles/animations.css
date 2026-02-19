@@ -1,0 +1,216 @@
+
+/* animations.css */
+
+/* ===========================================================
+  KRYEFRAMES (ANIMACIONES)
+  =========================================================== */
+
+@keyframes floatRune {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  8% { opacity: 0.55; }
+  50% { opacity: 0.6; }
+  92% { opacity: 0.55; }
+  100% { transform: translate(var(--tx), var(--ty)) rotate(360deg); opacity: 0; }
+}
+
+@keyframes starTwinkle {
+  0% { opacity: 0; transform: scale(0.6); }
+  8% { opacity: 0.85; transform: scale(1.15); }
+  35% { opacity: 1; transform: scale(1); }
+  65% { opacity: 0.75; transform: scale(0.95); }
+  90% { opacity: 0.5; transform: scale(0.85); }
+  100% { opacity: 0; transform: scale(0.6); }
+}
+
+@keyframes starGlow {
+  0% { filter: drop-shadow(0 0 2px var(--accent-glow)); box-shadow: 0 0 4px var(--accent-glow); }
+  30% { filter: drop-shadow(0 0 10px var(--accent-glow)); box-shadow: 0 0 14px var(--accent-glow); }
+  60% { filter: drop-shadow(0 0 18px var(--accent-glow)); box-shadow: 0 0 24px var(--accent-glow); }
+  100% { filter: drop-shadow(0 0 2px var(--accent-glow)); box-shadow: 0 0 4px var(--accent-glow); }
+}
+
+@keyframes pulseLine {
+  0%, 100% { background: linear-gradient(90deg, transparent, var(--accent-glow), transparent); }
+  50% { background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+}
+
+@keyframes pulseNode {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 10px var(--accent-glow); }
+  50% { transform: scale(1.2); box-shadow: 0 0 15px var(--accent); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+@keyframes rotateCircle {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes swing {
+  0%, 100% { transform: rotate(-5deg); transform-origin: top center; }
+  50% { transform: rotate(5deg); transform-origin: top center; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-15px) scale(1.05); }
+}
+
+@keyframes rune-glow {
+  0%, 100% { 
+    text-shadow: 0 0 10px var(--accent-glow);
+    transform: scale(1);
+  }
+  50% { 
+    text-shadow: 0 0 20px var(--accent-glow), 0 0 30px var(--accent-glow); /* Changed to accent-glow */
+    transform: scale(1.1);
+  }
+}
+
+@keyframes runicGlow {
+  0% { box-shadow: 0 0 30px var(--accent-glow), inset 0 0 20px var(--accent-glow); }
+  50% { box-shadow: 0 0 40px var(--accent-glow), inset 0 0 30px var(--accent-glow); }
+  100% { box-shadow: 0 0 30px var(--accent-glow), inset 0 0 20px var(--accent-glow); }
+}
+
+
+/* ===========================================================
+  CLASES DE ANIMACIONES
+  =========================================================== */
+
+/* ---- Habilidades ---- */
+.runes-section .floating-runes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.runes-section .floating-rune {
+  position: absolute;
+  color: var(--neutral-light);
+  font-size: 1.8rem;
+  opacity: 0;
+  mix-blend-mode: screen;
+  text-shadow: 0 0 8px var(--accent-glow);
+  filter: drop-shadow(0 0 10px var(--accent-glow));
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  animation-name: floatRune;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-duration: var(--dur, 24s);
+}
+
+/* ---- Estrellas del Home ---- */
+.home-nebula .star {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  background: radial-gradient(circle, var(--neutral-white) 0%, var(--neutral-light) 20%, var(--accent) 50%, transparent 100%);
+  filter: drop-shadow(0 0 12px var(--accent-glow));
+  box-shadow: 0 0 10px var(--accent-glow);
+  transform-origin: center;
+  will-change: opacity, transform, filter;
+  animation: starTwinkle var(--star-dur, 5s) ease-in-out var(--star-delay, 0s) infinite,
+             starGlow var(--star-glow-dur, 2.8s) ease-in-out var(--star-delay, 0s) infinite;
+}
+
+/* ---- Contacto ---- */
+.contact-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.background-stars-contact {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.star-contact {
+  position: absolute;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.5;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* ---- Certificados ---- */
+.certificates-section {
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.circuit-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.circuit-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.circuit-line {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+  height: 2px;
+  transform-origin: left center;
+  animation: pulseLine 3s ease-in-out infinite;
+}
+
+.circuit-node {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-glow);
+  animation: pulseNode 2s ease-in-out infinite;
+}
+
+.circuit-pulse {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulseGlow 1s ease-in-out infinite;
+  opacity: 0;
+}
+
+.circuit-circle {
+  position: absolute;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  animation: rotateCircle 10s linear infinite;
+}
+
+.circuit-star {
+  position: absolute;
+  background: hsla(0, 0%, 100%, 0.3);
+  border-radius: 50%;
+  opacity: 0.5;
+}

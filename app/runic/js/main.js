@@ -1,0 +1,1 @@
+// Contenido del archivo JS se agregará aquí

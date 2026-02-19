@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Gamer Theme - Neon RGB & Futuristic */
+.gamer-text {
+  font-family: "Rajdhani", sans-serif;
+  color: #00ffff;
+  text-shadow: 0 0 10px #00ffff;
+}
+
+.gamer-heading {
+  font-family: "Orbitron", monospace;
+  background: linear-gradient(45deg, #ff0080, #00ffff, #ff0080);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow 2s ease-in-out infinite alternate;
+}
+
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+@keyframes neonPulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
+  }
+  50% { 
+    box-shadow: 0 0 10px #ff0080, 0 0 20px #ff0080, 0 0 30px #ff0080;
+  }
+}
+
+.gamer-button {
+  background: linear-gradient(45deg, #ff0080, #00ffff);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  animation: neonPulse 2s infinite;
+  transition: all 0.3s ease;
+}
+
+.gamer-button:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+.gamer-card {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #00ffff;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.rgb-border {
+  position: relative;
+  background: linear-gradient(45deg, #ff0080, #00ffff, #8000ff, #ff0080);
+  background-size: 300% 300%;
+  animation: rainbow 3s ease infinite;
+}
+
+html {
+  scroll-behavior: smooth;
+}
