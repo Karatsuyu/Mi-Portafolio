@@ -11,6 +11,8 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0",
     "@heroicons/react": "^2.0.18",
+    "@splinetool/react-spline": "^3.0.3",
+    "@splinetool/runtime": "^1.12.74",
     "@supabase/supabase-js": "^2.86.2",
     "next": "13.5.6",
     "react": "^18",

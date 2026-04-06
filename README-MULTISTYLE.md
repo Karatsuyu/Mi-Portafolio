@@ -22,7 +22,7 @@ Un portafolio profesional con **4 temas completamente diferentes** construido co
 - Tipografías estilo pergamino antiguo
 - Efectos de resplandor y sombras místicas
 
-### 🎮 Gamer Theme (`/gamer`)
+### 🎮 Cyber Theme (`/cyber`)
 - Diseño cyberpunk con RGB y neón
 - Colores cyan/rosa/púrpura vibrantes
 - Tipografías monoespaciadas futuristas
@@ -70,7 +70,7 @@ Un portafolio profesional con **4 temas completamente diferentes** construido co
 │   │   ├── layout.tsx
 │   │   ├── page.tsx
 │   │   └── styles/globals.css
-│   ├── gamer/                  # Tema gamer
+│   ├── cyber/                  # Tema cyber
 │   │   ├── layout.tsx
 │   │   ├── page.tsx
 │   │   └── styles/globals.css
@@ -219,7 +219,7 @@ npm start
 - `/space` - Tema espacial (original)
 - `/classic` - Tema clásico profesional  
 - `/runic` - Tema medieval místico
-- `/gamer` - Tema cyberpunk gamer
+- `/cyber` - Tema cyberpunk
 
 ## 🤝 Contribuir
 

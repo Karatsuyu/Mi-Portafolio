@@ -107,15 +107,15 @@ const Navbar = () => {
                       Runic
                     </Link>
                     <Link
-                      href="/gamer"
+                      href="/cyber"
                       className={`px-3 py-2 rounded-lg text-sm transition-colors ${
-                        isActiveTheme("/gamer")
+                        isActiveTheme("/cyber")
                           ? "bg-purple-700/40 text-purple-200 border border-purple-500/40"
                           : "hover:bg-[#1a1438] hover:text-purple-200"
                       }`}
                       onClick={() => setOpen(false)}
                     >
-                      Gamer
+                      Cyber
                     </Link>
                     {/* Selector de temas página removida del dropdown */}
                   </nav>

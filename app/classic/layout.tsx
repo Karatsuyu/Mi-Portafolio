@@ -81,7 +81,7 @@ export default function ClassicLayout({ children }: { children: React.ReactNode 
                     className="style-dropdown-menu"
                     style={{ display: "none", position: "absolute", left: 0, top: "100%", background: "rgba(30,41,59,0.95)", border: "1px solid rgba(255,0,153,0.2)", borderRadius: 8, marginTop: 5, minWidth: 150, zIndex: 100, boxShadow: "0 10px 30px rgba(0,0,0,0.3)", whiteSpace: "nowrap" }}
                   >
-                    <Link href="/gamer" className="style-dropdown-item" style={{ display: "block", padding: "10px 15px", color: "#ffffff", textDecoration: "none" }}>
+                    <Link href="/cyber" className="style-dropdown-item" style={{ display: "block", padding: "10px 15px", color: "#ffffff", textDecoration: "none" }}>
                       Neon
                     </Link>
                   </div>
