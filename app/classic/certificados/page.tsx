@@ -1,3 +1,5 @@
+import Script from 'next/script';
+
 export default function ClassicCertificados() {
   return (
     <section className="section">
@@ -45,7 +47,10 @@ export default function ClassicCertificados() {
       </div>
 
       {/* PDF.js */}
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+      <Script
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+        strategy="afterInteractive"
+      />
     </section>
   );
 }

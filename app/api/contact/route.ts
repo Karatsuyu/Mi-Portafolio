@@ -1,8 +1,9 @@
-import { supabase } from "@/utils/supabase";
+import { getSupabaseClient } from "@/utils/supabase";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabaseClient();
     const body = await request.json();
     const { name, email, message } = body;
 
@@ -62,6 +63,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("messages")
       .select("*")

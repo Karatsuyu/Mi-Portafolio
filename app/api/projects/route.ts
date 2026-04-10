@@ -1,8 +1,9 @@
-import { supabase } from "@/utils/supabase";
+import { getSupabaseClient } from "@/utils/supabase";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   try {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from("projects")
       .select("*")
@@ -28,6 +29,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabaseClient();
     const body = await request.json();
     const { title, description, image_url, github_url, live_url, technologies } = body;
 

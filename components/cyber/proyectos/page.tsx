@@ -506,7 +506,7 @@ export default function ProyectosPage() {
               padding: '4rem 0',
             }}
           >
-            // no projects found in this category
+            {'// no projects found in this category'}
           </motion.p>
         )}
       </main>

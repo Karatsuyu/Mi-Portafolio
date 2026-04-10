@@ -19,7 +19,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   // Si la ruta es /runic o subruta, no renderizar navbar, footer ni estrellas
-  if (pathname && pathname.startsWith("/runic")) {
+  if (pathname && (pathname.startsWith("/runic") || pathname.startsWith("/cyber"))) {
     return <>{children}</>;
   }
 

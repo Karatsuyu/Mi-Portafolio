@@ -1,14 +1,36 @@
 'use client';
 
-import { useRef, Suspense, useMemo } from 'react';
-import Spline from '@splinetool/react-spline';
+import { useRef, Suspense, useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Float, MeshDistortMaterial, Sphere, Torus, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 import { motion } from 'framer-motion';
 
-const USE_SPLINE = false;
+const USE_SPLINE = true;
 const SPLINE_SCENE_URL = 'https://prod.spline.design/vxWjLMlors8Buvrx/scene.splinecode';
+
+const Spline = dynamic(() => import('@splinetool/react-spline'), { ssr: false });
+
+class ErrorBoundary extends (require('react').Component as typeof import('react').Component)<
+  { onError?: (error: unknown) => void; fallback: React.ReactNode; children: React.ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: unknown) {
+    this.props.onError?.(error);
+  }
+
+  render() {
+    if (this.state.hasError) return this.props.fallback;
+    return this.props.children;
+  }
+}
 
 // ── Geometría central: esfera distorsionada holográfica ──────
 function CoreSphere() {
@@ -198,8 +220,24 @@ function Scene() {
   );
 }
 
+function ThreeFallback() {
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 5.5], fov: 55 }}
+      gl={{ antialias: true, alpha: true }}
+      style={{ background: 'transparent' }}
+    >
+      <Suspense fallback={null}>
+        <Scene />
+      </Suspense>
+    </Canvas>
+  );
+}
+
 // ── Componente exportado ─────────────────────────────────────
 export default function HologramFigure() {
+  const [splineEnabled, setSplineEnabled] = useState(USE_SPLINE);
+
   return (
     <div
       style={{
@@ -223,21 +261,15 @@ export default function HologramFigure() {
         }}
       />
 
-      {USE_SPLINE ? (
-        <Spline
-          scene={SPLINE_SCENE_URL}
-          style={{ width: '100%', height: '100%', background: 'transparent' }}
-        />
+      {splineEnabled ? (
+        <ErrorBoundary fallback={<ThreeFallback />} onError={() => setSplineEnabled(false)}>
+          <Spline
+            scene={SPLINE_SCENE_URL}
+            style={{ width: '100%', height: '100%', background: 'transparent' }}
+          />
+        </ErrorBoundary>
       ) : (
-        <Canvas
-          camera={{ position: [0, 0, 5.5], fov: 55 }}
-          gl={{ antialias: true, alpha: true }}
-          style={{ background: 'transparent' }}
-        >
-          <Suspense fallback={null}>
-            <Scene />
-          </Suspense>
-        </Canvas>
+        <ThreeFallback />
       )}
 
       {/* Label holográfico */}

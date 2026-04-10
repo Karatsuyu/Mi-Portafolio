@@ -8,11 +8,12 @@ import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const [open, setOpen] = React.useState(false);
+
   // Ocultar Navbar en el estilo clásico (no hay header fijo)
   if (pathname?.startsWith("/classic")) {
     return null;
   }
-  const [open, setOpen] = React.useState(false);
 
   const isActiveTheme = (href: string) => pathname === href;
 
