@@ -1,33 +1,377 @@
-import React from "react";
-import ProjectCard from "../sub/ProjectCard";
+"use client";
+import React, { useRef, useEffect, useState } from "react";
+import * as THREE from "three";
+import { motion, AnimatePresence } from "framer-motion";
+import { SparklesIcon } from "@heroicons/react/24/solid";
+import { slideInFromTop } from "@/utils/motion";
 
-const Projects = () => {
+// ── Datos de proyectos ──────────────────────────────────────
+const PROJECTS = [
+  {
+    id: 1,
+    num: "01",
+    title: "Portfolio Next.js",
+    subtitle: "Multi-style portfolio",
+    description:
+      "Portfolio multi-estilo con 4 temas visuales radicalmente distintos. Next.js 13, React Three Fiber, Framer Motion y Supabase.",
+    stack: ["Next.js", "TypeScript", "Three.js", "Framer Motion"],
+    liveUrl: "",
+    repoUrl: "",
+    color: 0xb49bff,
+    hexColor: "#b49bff",
+  },
+  {
+    id: 2,
+    num: "02",
+    title: "Interactive Cards UI",
+    subtitle: "Component library",
+    description:
+      "Colección de componentes de tarjetas interactivas con animaciones CSS avanzadas, efectos glassmorphism y transiciones fluidas.",
+    stack: ["React", "Tailwind CSS", "Framer Motion"],
+    liveUrl: "",
+    repoUrl: "",
+    color: 0x7042f8,
+    hexColor: "#7042f8",
+  },
+  {
+    id: 3,
+    num: "03",
+    title: "Space Theme Website",
+    subtitle: "3D web experience",
+    description:
+      "Sitio web con temática espacial usando React Three Fiber para renderizar escenas 3D interactivas de estrellas y agujeros negros.",
+    stack: ["React", "Three.js", "R3F", "GLSL"],
+    liveUrl: "",
+    repoUrl: "",
+    color: 0x06b6d4,
+    hexColor: "#06b6d4",
+  },
+];
+
+// ── Escena Three.js: terreno wireframe + forma central ──────
+function useThreeScene(canvasRef: React.RefObject<HTMLCanvasElement>, activeColor: number) {
+  const sceneRef   = useRef<THREE.Scene | null>(null);
+  const rendRef    = useRef<THREE.WebGLRenderer | null>(null);
+  const cameraRef  = useRef<THREE.PerspectiveCamera | null>(null);
+  const shapeRef   = useRef<THREE.Mesh | null>(null);
+  const rafRef     = useRef<number>(0);
+  const colorRef   = useRef(activeColor);
+  colorRef.current = activeColor;
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Scene + camera
+    const scene  = new THREE.Scene();
+    const W = canvas.clientWidth  || 800;
+    const H = canvas.clientHeight || 400;
+    const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 1000);
+    camera.position.set(0, 18, 48);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setSize(W, H, false);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    // ── Terreno wireframe (izquierda + derecha) ────────────
+    const makeHill = (offsetX: number) => {
+      const geo = new THREE.PlaneGeometry(70, 60, 60, 60);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i);
+        const z = pos.getZ(i);
+        const h = Math.sin(x * 0.18) * Math.cos(z * 0.15) * 6
+                + Math.sin(x * 0.35 + 1.2) * 3
+                + Math.random() * 1.2;
+        pos.setY(i, h);
+      }
+      geo.computeVertexNormals();
+      const mat = new THREE.MeshBasicMaterial({
+        color: 0x2a0e61,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.55,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.rotation.x = -Math.PI / 2.8;
+      mesh.position.set(offsetX, -6, -8);
+      return mesh;
+    };
+
+    scene.add(makeHill(-30));
+    scene.add(makeHill(30));
+
+    // ── Forma central giratoria (estrella / icosaedro) ─────
+    const shapeGeo = new THREE.OctahedronGeometry(4.5, 1);
+    const shapeMat = new THREE.MeshBasicMaterial({
+      color: colorRef.current,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.9,
+    });
+    const shape = new THREE.Mesh(shapeGeo, shapeMat);
+    shape.position.set(0, 4, 0);
+    scene.add(shape);
+    shapeRef.current = shape;
+
+    // Anillo exterior
+    const ringGeo = new THREE.TorusGeometry(7, 0.06, 8, 80);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: colorRef.current,
+      transparent: true,
+      opacity: 0.35,
+    });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = Math.PI / 2.5;
+    scene.add(ring);
+
+    // Partículas doradas flotantes
+    const ptCount = 320;
+    const ptPositions = new Float32Array(ptCount * 3);
+    for (let i = 0; i < ptCount; i++) {
+      ptPositions[i * 3]     = (Math.random() - 0.5) * 80;
+      ptPositions[i * 3 + 1] = Math.random() * 30 - 5;
+      ptPositions[i * 3 + 2] = (Math.random() - 0.5) * 40;
+    }
+    const ptGeo = new THREE.BufferGeometry();
+    ptGeo.setAttribute("position", new THREE.BufferAttribute(ptPositions, 3));
+    const ptMat = new THREE.PointsMaterial({
+      color: colorRef.current,
+      size: 0.18,
+      transparent: true,
+      opacity: 0.7,
+    });
+    const particles = new THREE.Points(ptGeo, ptMat);
+    scene.add(particles);
+
+    sceneRef.current  = scene;
+    rendRef.current   = renderer;
+    cameraRef.current = camera;
+
+    // ── Animación ──────────────────────────────────────────
+    let t = 0;
+    const animate = () => {
+      rafRef.current = requestAnimationFrame(animate);
+      t += 0.008;
+      shape.rotation.y += 0.012;
+      shape.rotation.x += 0.006;
+      shape.position.y = 4 + Math.sin(t * 1.2) * 0.8;
+      ring.rotation.z  += 0.004;
+      particles.rotation.y += 0.0008;
+      // Actualiza color dinámicamente
+      (shapeMat as THREE.MeshBasicMaterial).color.setHex(colorRef.current);
+      (ringMat  as THREE.MeshBasicMaterial).color.setHex(colorRef.current);
+      (ptMat    as THREE.PointsMaterial).color.setHex(colorRef.current);
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    // Resize
+    const onResize = () => {
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h, false);
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("resize", onResize);
+      renderer.dispose();
+    };
+  }, []); // eslint-disable-line
+}
+
+// ── HUD overlay (texto estilo Cryptaris) ───────────────────
+function HUDOverlay({ project }: { project: typeof PROJECTS[0] }) {
   return (
-    <div
-      className="flex flex-col items-center justify-center py-20"
-      id="projects"
-    >
-      <h1 className="text-[40px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 py-20">
-        My Projects
-      </h1>
-      <div className="h-full w-full flex flex-col md:flex-row gap-10 px-10">
-        <ProjectCard
-          src="/NextWebsite.png"
-          title="Modern Next.js Portfolio"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        />
-        <ProjectCard
-          src="/CardImage.png"
-          title="Interactive Website Cards"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        />
-        <ProjectCard
-          src="/SpaceWebsite.png"
-          title="Space Themed Website"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        />
+    <div className="absolute inset-0 z-10 pointer-events-none select-none">
+      {/* Top-left: número + título */}
+      <motion.div
+        key={project.id + "tl"}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.4 }}
+        className="absolute top-6 left-8"
+      >
+        <div className="text-[11px] text-gray-500 tracking-[0.3em] uppercase mb-1">Mission</div>
+        <div className="text-5xl font-thin text-white/20 leading-none">{project.num}</div>
+        <div className="text-[11px] tracking-[0.2em] uppercase mt-1"
+          style={{ color: project.hexColor }}>
+          {project.subtitle}
+        </div>
+      </motion.div>
+
+      {/* Bottom-left: línea de scan */}
+      <div className="absolute bottom-8 left-0 right-0 flex items-center px-8 gap-3">
+        <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="text-[9px] tracking-[0.3em] text-gray-600 uppercase">
+          scanning...
+        </div>
+        <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       </div>
+
+      {/* Top-right: crosshair */}
+      <div className="absolute top-6 right-8 flex flex-col items-end gap-1">
+        <div className="flex gap-1">
+          <div className="w-4 h-[1px] bg-white/20" />
+          <div className="w-[1px] h-4 bg-white/20" />
+        </div>
+        <div className="text-[9px] text-gray-600 tracking-[0.2em]">SYS:ACTIVE</div>
+      </div>
+
+      {/* Bordes de esquina */}
+      {["top-0 left-0", "top-0 right-0 rotate-90", "bottom-0 right-0 rotate-180", "bottom-0 left-0 -rotate-90"].map((pos) => (
+        <div key={pos} className={`absolute ${pos} w-8 h-8 pointer-events-none`}>
+          <div className="absolute top-0 left-0 w-8 h-[1px] bg-white/15" />
+          <div className="absolute top-0 left-0 w-[1px] h-8 bg-white/15" />
+        </div>
+      ))}
     </div>
+  );
+}
+
+// ── Card de info del proyecto ───────────────────────────────
+function ProjectInfo({ project }: { project: typeof PROJECTS[0] }) {
+  return (
+    <motion.div
+      key={project.id}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.35 }}
+      className="absolute bottom-0 left-0 right-0 z-20 px-8 pb-16"
+    >
+      <div className="max-w-md">
+        <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
+        <p className="text-gray-400 text-sm leading-relaxed mb-4">{project.description}</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.stack.map((t) => (
+            <span key={t} className="text-[11px] px-2 py-1 rounded-full border"
+              style={{ borderColor: project.hexColor + "40", color: project.hexColor + "cc", background: project.hexColor + "10" }}>
+              {t}
+            </span>
+          ))}
+        </div>
+        <div className="flex gap-3 pointer-events-auto">
+          {project.liveUrl && (
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
+              className="text-xs px-4 py-2 rounded text-black font-semibold"
+              style={{ background: project.hexColor }}>
+              ↗ Demo
+            </a>
+          )}
+          {project.repoUrl && (
+            <a href={project.repoUrl} target="_blank" rel="noopener noreferrer"
+              className="text-xs px-4 py-2 rounded border text-gray-300"
+              style={{ borderColor: project.hexColor + "50" }}>
+              ⌥ Repo
+            </a>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ── Canvas wrapper ──────────────────────────────────────────
+function TerrainCanvas({ activeColor }: { activeColor: number }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useThreeScene(canvasRef, activeColor);
+  return (
+    <canvas
+      ref={canvasRef}
+      className="w-full h-full"
+      style={{ display: "block" }}
+    />
+  );
+}
+
+// ── Componente principal ────────────────────────────────────
+const Projects = () => {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const active = PROJECTS[activeIdx];
+
+  return (
+    <section id="projects" className="flex flex-col items-center py-20 relative">
+      {/* Header */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="flex flex-col items-center mb-10 z-10 relative"
+      >
+        <motion.div variants={slideInFromTop}
+          className="Welcome-box py-[8px] px-[7px] border border-[#7042f88b] opacity-[0.9] mb-6">
+          <SparklesIcon className="text-[#b49bff] mr-[10px] h-5 w-5" />
+          <h1 className="Welcome-text text-[13px]">Misiones completadas</h1>
+        </motion.div>
+        <h2 className="text-[40px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 text-center">
+          Proyectos
+        </h2>
+        <p className="text-gray-400 text-center mt-2 text-base">
+          Selecciona una misión para explorarla
+        </p>
+      </motion.div>
+
+      {/* Selector de proyectos */}
+      <div className="flex gap-2 mb-4 z-10 relative">
+        {PROJECTS.map((p, i) => (
+          <button key={p.id} onClick={() => setActiveIdx(i)}
+            className="flex items-center gap-2 px-5 py-2 rounded-full text-sm border transition-all duration-300"
+            style={{
+              borderColor: activeIdx === i ? p.hexColor : "#2A0E6160",
+              background:  activeIdx === i ? p.hexColor + "20" : "transparent",
+              color:       activeIdx === i ? p.hexColor : "#9ca3af",
+              boxShadow:   activeIdx === i ? `0 0 16px ${p.hexColor}40` : "none",
+            }}>
+            <span className="font-mono text-xs opacity-60">{p.num}</span>
+            {p.title}
+          </button>
+        ))}
+      </div>
+
+      {/* Escena 3D + HUD */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="relative w-full max-w-5xl mx-auto rounded-xl overflow-hidden"
+        style={{
+          height: 440,
+          border: `1px solid ${active.hexColor}25`,
+          boxShadow: `0 0 60px ${active.hexColor}18, inset 0 0 60px rgba(0,0,0,0.5)`,
+          background: "rgba(3,0,20,0.85)",
+        }}
+      >
+        {/* Canvas Three.js */}
+        <div className="absolute inset-0">
+          <TerrainCanvas activeColor={active.color} />
+        </div>
+
+        {/* Glow central */}
+        <div className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `radial-gradient(ellipse at 50% 40%, ${active.hexColor}15 0%, transparent 65%)`,
+            transition: "background 0.5s ease",
+          }}
+        />
+
+        {/* HUD texto */}
+        <HUDOverlay project={active} />
+
+        {/* Info del proyecto */}
+        <AnimatePresence mode="wait">
+          <ProjectInfo key={active.id} project={active} />
+        </AnimatePresence>
+      </motion.div>
+    </section>
   );
 };
 

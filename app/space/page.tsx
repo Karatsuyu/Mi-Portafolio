@@ -1,7 +1,10 @@
-import Encryption from "@/components/main/Encryption";
 import Hero from "@/components/main/Hero";
-import Projects from "@/components/main/Projects";
 import Skills from "@/components/main/Skills";
+import Encryption from "@/components/main/Encryption";
+import Projects from "@/components/main/Projects";
+import Formacion from "@/components/main/Formacion";
+import Certificados from "@/components/main/Certificados";
+import Contacto from "@/components/main/Contacto";
 
 export default function SpacePage() {
   return (
@@ -11,6 +14,9 @@ export default function SpacePage() {
         <Skills />
         <Encryption />
         <Projects />
+        <Formacion />
+        <Certificados />
+        <Contacto />
       </div>
     </main>
   );

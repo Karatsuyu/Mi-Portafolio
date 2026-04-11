@@ -1,11 +1,12 @@
 'use client';
 
-import { useRef, Suspense, useMemo, useState } from 'react';
+import { useEffect, useRef, Suspense, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Float, MeshDistortMaterial, Sphere, Torus, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 import { motion } from 'framer-motion';
+import { isWebGLAvailable } from '@/utils/webgl';
 
 const USE_SPLINE = true;
 const SPLINE_SCENE_URL = 'https://prod.spline.design/vxWjLMlors8Buvrx/scene.splinecode';
@@ -221,6 +222,8 @@ function Scene() {
 }
 
 function ThreeFallback() {
+  if (!isWebGLAvailable()) return null;
+
   return (
     <Canvas
       camera={{ position: [0, 0, 5.5], fov: 55 }}
@@ -237,6 +240,14 @@ function ThreeFallback() {
 // ── Componente exportado ─────────────────────────────────────
 export default function HologramFigure() {
   const [splineEnabled, setSplineEnabled] = useState(USE_SPLINE);
+  const [webglOk, setWebglOk] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    setWebglOk(isWebGLAvailable());
+  }, []);
+
+  if (webglOk === false) return null;
+  if (webglOk === null) return null;
 
   return (
     <div
