@@ -1,87 +1,239 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import { slideInFromLeft, slideInFromRight, slideInFromTop } from "@/utils/motion";
 
+type FormacionNode = {
+  id: string;
+  title: string;
+  institution: string;
+  description: string;
+  tags: string[];
+  type: "frontend" | "backend" | "otros";
+  accentColor?: string;
+  x: number;
+  y: number;
+  magnitude: number;
+};
+
 const FORMACION = [
   {
-    id: "ingenieria",
-    year: "2020 – Presente",
-    title: "Ingeniería de Sistemas",
-    institution: "Universidad Nacional de Colombia",
-    description: "Fundamentos de programación, algoritmos, estructuras de datos, bases de datos, redes y arquitectura de software.",
-    tags: ["Java", "C++", "SQL", "Redes", "Algoritmos"],
-    type: "degree",
-    x: 0.18, y: 0.22,   // posición relativa en el canvas de constelaciones
+    id: "tecnologia-software",
+    title: "Tecnología en Desarrollo de Software",
+    institution: "Universidad del Valle — Sede Caicedonia",
+    description:
+      "Formación orientada al desarrollo de software con énfasis en programación, estructuras de datos, arquitectura de sistemas y gestión de proyectos. Estado: 6° semestre (en curso).",
+    tags: [
+      "Programación",
+      "Estructuras de datos",
+      "Arquitectura",
+      "Gestión de proyectos",
+      "Buenas prácticas",
+    ],
+    type: "otros",
+    x: 0.16, y: 0.18,   // posición relativa en el mapa (0..1)
     magnitude: 1.0,       // brillo de la estrella
   },
   {
-    id: "webdev",
-    year: "2021",
-    title: "Web Developer Bootcamp",
-    institution: "Udemy — Colt Steele",
-    description: "HTML5, CSS3, JavaScript ES6+, Node.js, Express y MongoDB. Base completa del stack web moderno.",
-    tags: ["HTML", "CSS", "JavaScript", "Node.js", "MongoDB"],
-    type: "course",
-    x: 0.38, y: 0.55,
+    id: "programacion-poo-eventos",
+    title: "Programación (imperativa, POO y eventos)",
+    institution: "Universidad del Valle",
+    description:
+      "Bases sólidas de programación: imperativa, orientación a objetos y programación orientada a eventos. Enfoque en lógica, diseño de clases y buenas prácticas.",
+    tags: ["Java", "Python", "POO", "Eventos", "Buenas prácticas"],
+    type: "otros",
+    x: 0.36, y: 0.22,
     magnitude: 0.8,
   },
   {
-    id: "react",
-    year: "2021",
-    title: "React — The Complete Guide",
-    institution: "Udemy — Maximilian",
-    description: "React Hooks, Context API, Redux Toolkit, React Router, testing con Jest y patrones de arquitectura.",
-    tags: ["React", "Redux", "Hooks", "Testing"],
-    type: "course",
-    x: 0.62, y: 0.3,
+    id: "algoritmos-estructuras",
+    title: "Estructuras de Datos y Algoritmos",
+    institution: "Universidad del Valle",
+    description:
+      "Algoritmos, análisis de complejidad y estructuras de datos para resolver problemas de forma eficiente y mantenible.",
+    tags: ["Algoritmos", "Estructuras", "Complejidad", "Buenas prácticas"],
+    type: "otros",
+    x: 0.28, y: 0.42,
     magnitude: 0.85,
   },
   {
-    id: "typescript",
-    year: "2022",
-    title: "TypeScript Avanzado",
-    institution: "Documentación oficial",
-    description: "Tipos avanzados, generics, decoradores, utility types y migración de proyectos JS a TS estricto.",
-    tags: ["TypeScript", "Generics", "OOP"],
-    type: "self",
-    x: 0.5, y: 0.68,
+    id: "bases-datos",
+    title: "Bases de Datos",
+    institution: "Universidad del Valle",
+    description:
+      "Modelado relacional, SQL, normalización y diseño de bases de datos orientado a aplicaciones reales.",
+    tags: ["SQL", "Diseño relacional", "Modelado", "Consultas"],
+    type: "backend",
+    x: 0.5, y: 0.36,
     magnitude: 0.75,
   },
   {
-    id: "nextjs",
-    year: "2023",
-    title: "Next.js 13 App Router",
-    institution: "Vercel Docs + proyectos",
-    description: "App Router, Server Components, Streaming, Data Fetching patterns y deployment en Vercel.",
-    tags: ["Next.js 13", "Server Components", "Vercel"],
-    type: "self",
-    x: 0.78, y: 0.58,
+    id: "ingenieria-software",
+    title: "Ingeniería de Software",
+    institution: "Universidad del Valle",
+    description:
+      "Gestión de proyectos de software, ciclo de vida, pruebas, documentación y buenas prácticas de desarrollo para equipos.",
+    tags: ["Ciclo de vida", "Pruebas", "Documentación", "Gestión", "Calidad"],
+    type: "otros",
+    x: 0.62, y: 0.46,
     magnitude: 0.9,
   },
   {
-    id: "threejs",
-    year: "2023",
-    title: "Three.js & React Three Fiber",
-    institution: "Three.js Journey",
-    description: "Escenas 3D en la web, shaders GLSL, física, animaciones y optimización de rendimiento.",
-    tags: ["Three.js", "R3F", "GLSL", "WebGL"],
-    type: "course",
-    x: 0.28, y: 0.8,
-    magnitude: 1.1,
+    id: "desarrollo-web",
+    title: "Desarrollo Web",
+    institution: "Universidad del Valle",
+    description:
+      "Construcción de interfaces web con HTML, CSS, JavaScript y frameworks, con enfoque en experiencias modernas y responsivas.",
+    tags: ["HTML", "CSS", "JavaScript", "Frameworks", "UI"],
+    type: "frontend",
+    x: 0.74, y: 0.28,
+    magnitude: 0.95,
   },
-];
 
-// Conexiones entre nodos (índices)
-const CONNECTIONS = [
-  [0, 1], [1, 2], [1, 3], [2, 4], [3, 5], [2, 3], [4, 5],
+  {
+    id: "apps-moviles",
+    title: "Desarrollo de Aplicaciones Móviles",
+    institution: "Universidad del Valle",
+    description:
+      "Desarrollo de aplicaciones móviles con enfoque en arquitectura, consumo de APIs y experiencia de usuario.",
+    tags: ["React Native", "Arquitectura", "APIs", "UI/UX"],
+    type: "otros",
+    x: 0.86, y: 0.48,
+    magnitude: 0.85,
+  },
+  {
+    id: "sistemas-redes",
+    title: "Sistemas Operativos y Redes",
+    institution: "Universidad del Valle",
+    description:
+      "Fundamentos de sistemas operativos, redes y conceptos de infraestructura para construir software robusto.",
+    tags: ["SO", "Redes", "Procesos", "TCP/IP"],
+    type: "backend",
+    accentColor: "#f97316",
+    x: 0.46, y: 0.62,
+    magnitude: 0.8,
+  },
+  {
+    id: "fundamentos-matematicos",
+    title: "Fundamentos de Computación",
+    institution: "Universidad del Valle",
+    description:
+      "Base matemática y computacional: matemáticas discretas, álgebra lineal, cálculo, probabilidad y estadística aplicada.",
+    tags: ["Discretas", "Álgebra", "Cálculo", "Probabilidad", "Estadística"],
+    type: "otros",
+    x: 0.18, y: 0.66,
+    magnitude: 0.75,
+  },
+  {
+    id: "proyecto-integrador",
+    title: "Proyecto Integrador",
+    institution: "Universidad del Valle",
+    description:
+      "Experiencia aplicada enfocada en construir soluciones reales: análisis, implementación, pruebas y entrega.",
+    tags: ["Soluciones reales", "Trabajo en equipo", "Entrega", "Testing"],
+    type: "otros",
+    accentColor: "#f59e0b",
+    x: 0.72, y: 0.72,
+    magnitude: 0.9,
+  },
+  {
+    id: "ciberseguridad",
+    title: "Ciberseguridad (fundamentos)",
+    institution: "Universidad del Valle",
+    description:
+      "Fundamentos de seguridad informática y concientización: buenas prácticas de protección de sistemas, ética y vulnerabilidades comunes.",
+    tags: ["Seguridad", "Buenas prácticas", "Ética", "Vulnerabilidades"],
+    type: "backend",
+    accentColor: "#ef4444",
+    x: 0.58, y: 0.84,
+    magnitude: 0.85,
+  },
+  {
+    id: "complementaria",
+    title: "Formación Complementaria",
+    institution: "Universidad del Valle",
+    description:
+      "Ética profesional, comunicación académica, ingeniería económica e impactos ambientales aplicados al desarrollo.",
+    tags: ["Ética", "Comunicación", "Economía", "Impacto ambiental"],
+    type: "otros",
+    x: 0.30, y: 0.86,
+    magnitude: 0.7,
+  },
+] satisfies FormacionNode[];
+
+// Conexiones entre nodos (por id)
+const CONNECTIONS: Array<[FormacionNode["id"], FormacionNode["id"]]> = [
+  ["tecnologia-software", "programacion-poo-eventos"],
+  ["tecnologia-software", "fundamentos-matematicos"],
+  ["tecnologia-software", "algoritmos-estructuras"],
+  ["tecnologia-software", "bases-datos"],
+  ["programacion-poo-eventos", "algoritmos-estructuras"],
+  ["programacion-poo-eventos", "desarrollo-web"],
+  ["algoritmos-estructuras", "bases-datos"],
+  ["algoritmos-estructuras", "ingenieria-software"],
+  ["fundamentos-matematicos", "algoritmos-estructuras"],
+  ["bases-datos", "ingenieria-software"],
+  ["bases-datos", "desarrollo-web"],
+  ["ingenieria-software", "desarrollo-web"],
+  ["ingenieria-software", "apps-moviles"],
+  ["desarrollo-web", "apps-moviles"],
+  ["bases-datos", "sistemas-redes"],
+  ["sistemas-redes", "ingenieria-software"],
+  ["sistemas-redes", "ciberseguridad"],
+  ["ingenieria-software", "proyecto-integrador"],
+  ["desarrollo-web", "proyecto-integrador"],
+  ["apps-moviles", "proyecto-integrador"],
+  ["proyecto-integrador", "ciberseguridad"],
+  ["fundamentos-matematicos", "complementaria"],
+  ["complementaria", "ingenieria-software"],
+  ["complementaria", "ciberseguridad"],
 ];
 
 const TYPE_CONFIG = {
-  degree:  { color: "#b49bff", label: "Título"       },
-  course:  { color: "#06b6d4", label: "Curso"        },
-  self:    { color: "#7042f8", label: "Autodidacta"  },
+  frontend: { color: "#b49bff", label: "Frontend" },
+  backend:  { color: "#7042f8", label: "Backend"  },
+  otros:    { color: "#06b6d4", label: "Otros"    },
+};
+
+const clampByte = (v: number) => Math.max(0, Math.min(255, v));
+
+const hash01 = (str: string) => {
+  // FNV-1a (determinista, rápido)
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return ((h >>> 0) % 10000) / 10000;
+};
+
+const tweakHex = (hex: string, amount: number) => {
+  const clean = hex.replace("#", "");
+  const r = parseInt(clean.slice(0, 2), 16);
+  const g = parseInt(clean.slice(2, 4), 16);
+  const b = parseInt(clean.slice(4, 6), 16);
+
+  // amount in [-0.2..0.2] approx
+  const factor = 1 + amount;
+  const rr = clampByte(Math.round(r * factor));
+  const gg = clampByte(Math.round(g * factor));
+  const bb = clampByte(Math.round(b * factor));
+
+  const toHex = (n: number) => n.toString(16).padStart(2, "0");
+  return `#${toHex(rr)}${toHex(gg)}${toHex(bb)}`;
+};
+
+const NODE_COLOR_CACHE = new Map<string, string>();
+const colorForNode = (node: FormacionNode) => {
+  const cached = NODE_COLOR_CACHE.get(node.id);
+  if (cached) return cached;
+
+  const base = node.accentColor ?? TYPE_CONFIG[node.type as keyof typeof TYPE_CONFIG].color;
+  const jitter = (hash01(node.id) - 0.5) * 0.14; // variación leve
+  const c = tweakHex(base, jitter);
+  NODE_COLOR_CACHE.set(node.id, c);
+  return c;
 };
 
 // ── Canvas de constelaciones ────────────────────────────────
@@ -101,6 +253,14 @@ function ConstellationCanvas({
     if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
 
+    // Evita scroll/pinch en touch mientras se arrastra
+    canvas.style.touchAction = "none";
+
+    // Mapa virtual (más grande que el canvas) para poder navegar arrastrando
+    const WORLD_W = 1600;
+    const WORLD_H = 980;
+    const panRef = { x: 0, y: 0 };
+
     const resize = () => {
       canvas.width  = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
@@ -112,41 +272,136 @@ function ConstellationCanvas({
     let raf: number;
     let hoverId: string | null = null;
 
-    const getPos = (node: typeof FORMACION[0]) => ({
-      x: node.x * canvas.width,
-      y: node.y * canvas.height,
+    // Estado de arrastre
+    let pointerDown = false;
+    let dragMoved = false;
+    let startX = 0;
+    let startY = 0;
+    let startPanX = 0;
+    let startPanY = 0;
+
+    const clampPan = () => {
+      const maxX = Math.max(0, WORLD_W - canvas.width);
+      const maxY = Math.max(0, WORLD_H - canvas.height);
+      panRef.x = Math.max(0, Math.min(panRef.x, maxX));
+      panRef.y = Math.max(0, Math.min(panRef.y, maxY));
+    };
+
+    const worldPos = (node: FormacionNode) => ({
+      x: node.x * WORLD_W,
+      y: node.y * WORLD_H,
     });
 
-    const onMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const mx = e.clientX - rect.left;
-      const my = e.clientY - rect.top;
-      hoverId = null;
-      for (const node of FORMACION) {
-        const p = getPos(node);
-        if (Math.hypot(mx - p.x, my - p.y) < 24) {
-          hoverId = node.id;
-          break;
-        }
-      }
-      canvas.style.cursor = hoverId ? "pointer" : "default";
+    const screenPos = (node: FormacionNode) => {
+      const wp = worldPos(node);
+      return {
+        x: wp.x - panRef.x,
+        y: wp.y - panRef.y,
+      };
     };
 
-    const onClick = (e: MouseEvent) => {
+    // Centrar vista inicial alrededor del contenido
+    {
+      const xs = FORMACION.map((n) => worldPos(n).x);
+      const ys = FORMACION.map((n) => worldPos(n).y);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+      panRef.x = (minX + maxX) / 2 - canvas.width / 2;
+      panRef.y = (minY + maxY) / 2 - canvas.height / 2;
+      clampPan();
+    }
+
+    // colorForNode viene de helpers a nivel de módulo
+
+    const hitTest = (mx: number, my: number) => {
+      const wx = mx + panRef.x;
+      const wy = my + panRef.y;
+      for (const node of FORMACION) {
+        const p = worldPos(node);
+        if (Math.hypot(wx - p.x, wy - p.y) < 24) {
+          return node.id;
+        }
+      }
+      return null;
+    };
+
+    const onMove = (e: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
       const mx = e.clientX - rect.left;
       const my = e.clientY - rect.top;
-      for (const node of FORMACION) {
-        const p = getPos(node);
-        if (Math.hypot(mx - p.x, my - p.y) < 24) {
-          onSelect(node.id);
+
+      if (pointerDown) {
+        const dx = mx - startX;
+        const dy = my - startY;
+        if (Math.abs(dx) + Math.abs(dy) > 3) dragMoved = true;
+        panRef.x = startPanX - dx;
+        panRef.y = startPanY - dy;
+        clampPan();
+        canvas.style.cursor = "grabbing";
+        hoverId = null;
+        return;
+      }
+
+      hoverId = hitTest(mx, my);
+      canvas.style.cursor = hoverId ? "pointer" : "grab";
+    };
+
+    const onDown = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      pointerDown = true;
+      dragMoved = false;
+      startX = mx;
+      startY = my;
+      startPanX = panRef.x;
+      startPanY = panRef.y;
+      try {
+        canvas.setPointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+      canvas.style.cursor = "grabbing";
+    };
+
+    const onUp = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+
+      pointerDown = false;
+      canvas.style.cursor = "grab";
+
+      if (!dragMoved) {
+        const hit = hitTest(mx, my);
+        if (hit) {
+          onSelect(hit);
           return;
         }
+        onSelect("");
       }
-      onSelect("");
     };
 
-    canvas.addEventListener("mousemove", onMove);
+    const onLeave = () => {
+      hoverId = null;
+      if (!pointerDown) canvas.style.cursor = "grab";
+    };
+
+    const onClick = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      // No-op: el click se resuelve en onUp para diferenciarlo del drag
+      void mx;
+      void my;
+    };
+
+    canvas.addEventListener("pointermove", onMove);
+    canvas.addEventListener("pointerdown", onDown);
+    canvas.addEventListener("pointerup", onUp);
+    canvas.addEventListener("pointerleave", onLeave);
     canvas.addEventListener("click", onClick);
 
     const draw = () => {
@@ -157,13 +412,22 @@ function ConstellationCanvas({
       const W = canvas.width;
       const H = canvas.height;
 
+      // Fondo sutil (para profundidad)
+      const bg = ctx.createRadialGradient(W * 0.55, H * 0.45, 0, W * 0.55, H * 0.45, Math.max(W, H));
+      bg.addColorStop(0, "rgba(255,255,255,0.02)");
+      bg.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+
       // ── Estrellas de fondo ──────────────────────────────
-      // (estáticas, pintadas una vez)
-      ctx.fillStyle = "rgba(255,255,255,0.025)";
-      for (let i = 0; i < 120; i++) {
-        // seed determinista
-        const sx = ((i * 137.5) % 1) * W;
-        const sy = ((i * 73.1 + 0.3) % 1) * H;
+      ctx.fillStyle = "rgba(255,255,255,0.03)";
+      for (let i = 0; i < 160; i++) {
+        // seed determinista en el mundo
+        const wx = ((i * 137.5) % 1) * WORLD_W;
+        const wy = ((i * 73.1 + 0.3) % 1) * WORLD_H;
+        const sx = wx - panRef.x;
+        const sy = wy - panRef.y;
+        if (sx < -10 || sy < -10 || sx > W + 10 || sy > H + 10) continue;
         const sr = 0.5 + ((i * 0.31) % 0.8);
         ctx.beginPath();
         ctx.arc(sx, sy, sr, 0, Math.PI * 2);
@@ -171,16 +435,20 @@ function ConstellationCanvas({
       }
 
       // ── Líneas de constelación ──────────────────────────
-      CONNECTIONS.forEach(([a, b]) => {
-        const pa = getPos(FORMACION[a]);
-        const pb = getPos(FORMACION[b]);
+      const byId = new Map(FORMACION.map((n) => [n.id, n] as const));
+      CONNECTIONS.forEach(([aId, bId]) => {
+        const a = byId.get(aId);
+        const b = byId.get(bId);
+        if (!a || !b) return;
+        const pa = screenPos(a);
+        const pb = screenPos(b);
         const isActive =
-          activeIdRef.current === FORMACION[a].id ||
-          activeIdRef.current === FORMACION[b].id;
+          activeIdRef.current === a.id ||
+          activeIdRef.current === b.id;
 
         const grad = ctx.createLinearGradient(pa.x, pa.y, pb.x, pb.y);
-        const cA = TYPE_CONFIG[FORMACION[a].type as keyof typeof TYPE_CONFIG].color;
-        const cB = TYPE_CONFIG[FORMACION[b].type as keyof typeof TYPE_CONFIG].color;
+        const cA = colorForNode(a);
+        const cB = colorForNode(b);
         grad.addColorStop(0, cA + (isActive ? "90" : "28"));
         grad.addColorStop(1, cB + (isActive ? "90" : "28"));
 
@@ -192,7 +460,7 @@ function ConstellationCanvas({
         ctx.stroke();
 
         // Partícula viajando por la línea
-        const frac = (Math.sin(t + a * 0.7 + b * 0.3) * 0.5 + 0.5);
+        const frac = (Math.sin(t + a.x * 7 + b.y * 3) * 0.5 + 0.5);
         const px = pa.x + (pb.x - pa.x) * frac;
         const py = pa.y + (pb.y - pa.y) * frac;
         ctx.beginPath();
@@ -203,8 +471,9 @@ function ConstellationCanvas({
 
       // ── Nodos de estrella ───────────────────────────────
       FORMACION.forEach((node) => {
-        const p = getPos(node);
+        const p = screenPos(node);
         const cfg = TYPE_CONFIG[node.type as keyof typeof TYPE_CONFIG];
+        const nodeColor = colorForNode(node);
         const isHover  = hoverId === node.id;
         const isActive = activeIdRef.current === node.id;
         const pulse = 1 + Math.sin(t * 1.8 + node.x * 10) * 0.15;
@@ -212,7 +481,7 @@ function ConstellationCanvas({
 
         // Halo exterior
         const halo = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, baseR * 3);
-        halo.addColorStop(0, cfg.color + "40");
+        halo.addColorStop(0, nodeColor + "40");
         halo.addColorStop(1, "transparent");
         ctx.beginPath();
         ctx.arc(p.x, p.y, baseR * 3, 0, Math.PI * 2);
@@ -220,7 +489,7 @@ function ConstellationCanvas({
         ctx.fill();
 
         // Estrella (cruz de destellos)
-        ctx.strokeStyle = cfg.color + (isActive ? "ff" : "88");
+        ctx.strokeStyle = nodeColor + (isActive ? "ff" : "88");
         ctx.lineWidth = 0.7;
         ctx.beginPath();
         ctx.moveTo(p.x - baseR * 2, p.y);
@@ -234,8 +503,8 @@ function ConstellationCanvas({
         // Core
         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, baseR);
         grad.addColorStop(0, "white");
-        grad.addColorStop(0.3, cfg.color);
-        grad.addColorStop(1, cfg.color + "00");
+        grad.addColorStop(0.3, nodeColor);
+        grad.addColorStop(1, nodeColor + "00");
         ctx.beginPath();
         ctx.arc(p.x, p.y, baseR, 0, Math.PI * 2);
         ctx.fillStyle = grad;
@@ -245,7 +514,7 @@ function ConstellationCanvas({
         if (isActive) {
           ctx.beginPath();
           ctx.arc(p.x, p.y, baseR + 6 + Math.sin(t * 3) * 2, 0, Math.PI * 2);
-          ctx.strokeStyle = cfg.color + "50";
+          ctx.strokeStyle = nodeColor + "50";
           ctx.lineWidth = 1;
           ctx.stroke();
         }
@@ -255,10 +524,6 @@ function ConstellationCanvas({
         ctx.fillStyle = isActive ? "white" : "rgba(200,200,220,0.65)";
         ctx.textAlign = "center";
         ctx.fillText(node.title.length > 20 ? node.title.slice(0, 18) + "…" : node.title, p.x, p.y - baseR - 8);
-
-        ctx.font = "10px monospace";
-        ctx.fillStyle = cfg.color + "99";
-        ctx.fillText(node.year, p.x, p.y + baseR + 14);
       });
     };
 
@@ -267,7 +532,10 @@ function ConstellationCanvas({
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
-      canvas.removeEventListener("mousemove", onMove);
+      canvas.removeEventListener("pointermove", onMove);
+      canvas.removeEventListener("pointerdown", onDown);
+      canvas.removeEventListener("pointerup", onUp);
+      canvas.removeEventListener("pointerleave", onLeave);
       canvas.removeEventListener("click", onClick);
     };
   }, []); // eslint-disable-line
@@ -291,6 +559,7 @@ function NodeDetail({ node }: { node: typeof FORMACION[0] | null }) {
   );
 
   const cfg = TYPE_CONFIG[node.type as keyof typeof TYPE_CONFIG];
+  const detailColor = colorForNode(node);
 
   return (
     <motion.div
@@ -303,22 +572,20 @@ function NodeDetail({ node }: { node: typeof FORMACION[0] | null }) {
     >
       {/* Tipo badge */}
       <span className="text-[10px] uppercase tracking-widest px-3 py-1 rounded-full self-start mb-4"
-        style={{ background: cfg.color + "18", color: cfg.color, border: `1px solid ${cfg.color}30` }}>
+        style={{ background: detailColor + "18", color: detailColor, border: `1px solid ${detailColor}30` }}>
         {cfg.label}
       </span>
-
-      <div className="text-xs text-gray-600 mb-1 font-mono">{node.year}</div>
       <h3 className="text-xl font-bold text-white mb-1">{node.title}</h3>
-      <p className="text-sm mb-4" style={{ color: cfg.color + "99" }}>{node.institution}</p>
+      <p className="text-sm mb-4" style={{ color: detailColor + "99" }}>{node.institution}</p>
 
-      <div className="h-[1px] mb-4" style={{ background: `linear-gradient(90deg, ${cfg.color}50, transparent)` }} />
+      <div className="h-[1px] mb-4" style={{ background: `linear-gradient(90deg, ${detailColor}50, transparent)` }} />
 
       <p className="text-gray-400 text-sm leading-relaxed flex-1">{node.description}</p>
 
       <div className="flex flex-wrap gap-2 mt-4">
         {node.tags.map((tag) => (
           <span key={tag} className="text-[11px] px-2 py-1 rounded-full"
-            style={{ border: `1px solid ${cfg.color}28`, color: cfg.color + "90", background: cfg.color + "0a" }}>
+            style={{ border: `1px solid ${detailColor}28`, color: detailColor + "90", background: detailColor + "0a" }}>
             {tag}
           </span>
         ))}

@@ -1,7 +1,7 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import * as THREE from "three";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import { slideInFromTop } from "@/utils/motion";
 
@@ -10,41 +10,127 @@ const PROJECTS = [
   {
     id: 1,
     num: "01",
-    title: "Portfolio Next.js",
-    subtitle: "Multi-style portfolio",
+    title: "Tienda Online",
+    subtitle: "E-commerce full-stack",
     description:
-      "Portfolio multi-estilo con 4 temas visuales radicalmente distintos. Next.js 13, React Three Fiber, Framer Motion y Supabase.",
-    stack: ["Next.js", "TypeScript", "Three.js", "Framer Motion"],
+      "Plataforma web para explorar productos, ver detalles y realizar compras (carrito, autenticación, checkout y órdenes).",
+    stack: [
+      "Next.js 15",
+      "React 19",
+      "Tailwind CSS",
+      "FastAPI",
+      "SQLAlchemy",
+      "Docker",
+    ],
     liveUrl: "",
-    repoUrl: "",
-    color: 0xb49bff,
-    hexColor: "#b49bff",
+    repoUrl: "https://github.com/Karatsuyu/Tienda-Online.git",
+    color: 0xef4444,
+    hexColor: "#ef4444",
   },
   {
     id: 2,
     num: "02",
-    title: "Interactive Cards UI",
-    subtitle: "Component library",
+    title: "Delicious Food",
+    subtitle: "Delivery + e-commerce",
     description:
-      "Colección de componentes de tarjetas interactivas con animaciones CSS avanzadas, efectos glassmorphism y transiciones fluidas.",
-    stack: ["React", "Tailwind CSS", "Framer Motion"],
+      "App full-stack de pedidos con combos personalizados, carrito persistente, pagos con Stripe y notificaciones.",
+    stack: [
+      "Django",
+      "DRF",
+      "JWT",
+      "Stripe",
+      "React",
+      "Vite",
+    ],
     liveUrl: "",
-    repoUrl: "",
-    color: 0x7042f8,
-    hexColor: "#7042f8",
+    repoUrl: "https://github.com/Karatsuyu/delicious-food-app.git",
+    color: 0xf97316,
+    hexColor: "#f97316",
   },
   {
     id: 3,
     num: "03",
-    title: "Space Theme Website",
-    subtitle: "3D web experience",
+    title: "ParkingPro",
+    subtitle: "SaaS de parqueaderos",
     description:
-      "Sitio web con temática espacial usando React Three Fiber para renderizar escenas 3D interactivas de estrellas y agujeros negros.",
-    stack: ["React", "Three.js", "R3F", "GLSL"],
+      "SaaS para gestionar parqueaderos con entrada/salida en tiempo real, facturación, reservas online y analytics (WebSockets).",
+    stack: [
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "Redis",
+      "Socket.IO",
+      "React + TS",
+    ],
     liveUrl: "",
-    repoUrl: "",
+    repoUrl: "https://github.com/Karatsuyu/parking-app.git",
+    color: 0xfacc15,
+    hexColor: "#facc15",
+  },
+  {
+    id: 4,
+    num: "04",
+    title: "Registraduría",
+    subtitle: "Gestión registral",
+    description:
+      "Sistema web full-stack para gestionar personas y documentos, con búsquedas y reportes estadísticos.",
+    stack: ["Node.js", "Express", "PostgreSQL", "React", "Vite"],
+    liveUrl: "",
+    repoUrl: "https://github.com/Karatsuyu/Registradur-a-De-Colombia.git",
+    color: 0x22c55e,
+    hexColor: "#22c55e",
+  },
+  {
+    id: 5,
+    num: "05",
+    title: "MiSalud",
+    subtitle: "Predicción de riesgo",
+    description:
+      "Plataforma full-stack para hábitos y contenido educativo con predicciones de riesgo, dashboard y seguridad con JWT.",
+    stack: [
+      "Django",
+      "DRF",
+      "React",
+      "Tailwind CSS",
+      "React Query",
+      "Zod",
+    ],
+    liveUrl: "",
+    repoUrl: "https://github.com/Karatsuyu/Mi-Salud.git",
     color: 0x06b6d4,
     hexColor: "#06b6d4",
+  },
+  {
+    id: 6,
+    num: "06",
+    title: "Lavelo Pues",
+    subtitle: "API + desktop client",
+    description:
+      "Backend REST para clientes/servicios y frontend de escritorio en Tkinter consumiendo la API (CRUD completo).",
+    stack: [
+      "Django",
+      "DRF",
+      "SQLite",
+      "Tkinter",
+      "requests",
+    ],
+    liveUrl: "",
+    repoUrl: "https://github.com/Karatsuyu/Lavelo-Pues.git",
+    color: 0x3b82f6,
+    hexColor: "#3b82f6",
+  },
+  {
+    id: 7,
+    num: "07",
+    title: "Banco (Corresponsal)",
+    subtitle: "Sistema bancario desktop",
+    description:
+      "Sistema desktop para gestionar clientes, cuentas y transacciones con persistencia custom en archivos .txt y GUI multi-ventana.",
+    stack: ["Python", "Tkinter", "POO", "Persistencia TXT"],
+    liveUrl: "",
+    repoUrl: "https://github.com/Karatsuyu/Banco.git",
+    color: 0xa855f7,
+    hexColor: "#a855f7",
   },
 ];
 
@@ -297,6 +383,26 @@ const Projects = () => {
   const [activeIdx, setActiveIdx] = useState(0);
   const active = PROJECTS[activeIdx];
 
+  const VISIBLE_SELECTORS = 3;
+  const [selectorStart, setSelectorStart] = useState(0);
+
+  const maxSelectorStart = Math.max(0, PROJECTS.length - VISIBLE_SELECTORS);
+  const clampSelectorStart = useCallback(
+    (value: number) => Math.max(0, Math.min(value, maxSelectorStart)),
+    [maxSelectorStart]
+  );
+
+  useEffect(() => {
+    // Mantén el proyecto activo visible dentro de la ventana del carrusel
+    if (activeIdx < selectorStart) {
+      setSelectorStart(clampSelectorStart(activeIdx));
+      return;
+    }
+    if (activeIdx >= selectorStart + VISIBLE_SELECTORS) {
+      setSelectorStart(clampSelectorStart(activeIdx - (VISIBLE_SELECTORS - 1)));
+    }
+  }, [activeIdx, selectorStart, VISIBLE_SELECTORS, clampSelectorStart]);
+
   return (
     <section id="projects" className="flex flex-col items-center py-20 relative">
       {/* Header */}
@@ -320,20 +426,80 @@ const Projects = () => {
       </motion.div>
 
       {/* Selector de proyectos */}
-      <div className="flex gap-2 mb-4 z-10 relative">
-        {PROJECTS.map((p, i) => (
-          <button key={p.id} onClick={() => setActiveIdx(i)}
-            className="flex items-center gap-2 px-5 py-2 rounded-full text-sm border transition-all duration-300"
-            style={{
-              borderColor: activeIdx === i ? p.hexColor : "#2A0E6160",
-              background:  activeIdx === i ? p.hexColor + "20" : "transparent",
-              color:       activeIdx === i ? p.hexColor : "#9ca3af",
-              boxShadow:   activeIdx === i ? `0 0 16px ${p.hexColor}40` : "none",
-            }}>
-            <span className="font-mono text-xs opacity-60">{p.num}</span>
-            {p.title}
-          </button>
-        ))}
+      <div className="flex items-center gap-3 mb-4 z-10 relative w-full max-w-5xl px-4">
+        <button
+          type="button"
+          aria-label="Ver anteriores"
+          onClick={() => {
+            const nextStart = clampSelectorStart(selectorStart - 1);
+            setSelectorStart(nextStart);
+            if (activeIdx < nextStart || activeIdx >= nextStart + VISIBLE_SELECTORS) {
+              setActiveIdx(nextStart);
+            }
+          }}
+          disabled={selectorStart === 0}
+          className="h-10 w-10 rounded-full border border-[#7042f861] bg-[#0300145e] text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          ←
+        </button>
+
+        <div className="flex flex-1 gap-2 justify-center">
+          {PROJECTS.slice(selectorStart, selectorStart + VISIBLE_SELECTORS).map((p) => {
+            const idx = PROJECTS.findIndex((x) => x.id === p.id);
+            const selected = idx === activeIdx;
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => setActiveIdx(idx)}
+                className="flex-1 min-w-0 rounded-xl border px-4 py-3 text-left transition-all duration-300"
+                style={{
+                  borderColor: selected ? p.hexColor : "#2A0E6160",
+                  background: selected ? p.hexColor + "14" : "rgba(3,0,20,0.25)",
+                  boxShadow: selected ? `0 0 20px ${p.hexColor}35` : "none",
+                }}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span
+                    className="font-mono text-xs tracking-[0.2em]"
+                    style={{ color: selected ? p.hexColor : "#6b7280" }}
+                  >
+                    {p.num}
+                  </span>
+                  <span
+                    className="text-[10px] uppercase tracking-[0.18em] truncate"
+                    style={{ color: selected ? p.hexColor : "#6b7280" }}
+                  >
+                    {p.subtitle}
+                  </span>
+                </div>
+                <div
+                  className="mt-2 text-sm font-medium truncate"
+                  style={{ color: selected ? "#e5e7eb" : "#9ca3af" }}
+                  title={p.title}
+                >
+                  {p.title}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <button
+          type="button"
+          aria-label="Ver siguientes"
+          onClick={() => {
+            const nextStart = clampSelectorStart(selectorStart + 1);
+            setSelectorStart(nextStart);
+            if (activeIdx < nextStart || activeIdx >= nextStart + VISIBLE_SELECTORS) {
+              setActiveIdx(nextStart);
+            }
+          }}
+          disabled={selectorStart >= Math.max(0, PROJECTS.length - VISIBLE_SELECTORS)}
+          className="h-10 w-10 rounded-full border border-[#7042f861] bg-[#0300145e] text-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          →
+        </button>
       </div>
 
       {/* Escena 3D + HUD */}
@@ -367,9 +533,7 @@ const Projects = () => {
         <HUDOverlay project={active} />
 
         {/* Info del proyecto */}
-        <AnimatePresence mode="wait">
-          <ProjectInfo key={active.id} project={active} />
-        </AnimatePresence>
+        <ProjectInfo key={active.id} project={active} />
       </motion.div>
     </section>
   );
