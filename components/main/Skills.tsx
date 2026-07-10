@@ -4,50 +4,31 @@ import { motion, useInView } from "framer-motion";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import { slideInFromLeft, slideInFromRight, slideInFromTop } from "@/utils/motion";
 import Image from "next/image";
+import { UNIFIED_SKILLS } from "@/constants";
 
-// ── Datos de habilidades con niveles ────────────────────────
+// ── Datos de habilidades con niveles (USANDO UNIFIED_SKILLS) ────
 const SKILL_GROUPS = [
   {
     category: "Frontend",
     color: "#b49bff",
     glow: "rgba(180,155,255,0.4)",
-    skills: [
-      { name: "React",        level: 92, icon: "/react.png"       },
-      { name: "Next.js",      level: 88, icon: "/next.png"        },
-      { name: "TypeScript",   level: 85, icon: "/ts.png"          },
-      { name: "Tailwind CSS", level: 90, icon: "/tailwind.png"    },
-      { name: "HTML5",        level: 95, icon: "/html.png"        },
-      { name: "CSS3",         level: 90, icon: "/css.png"         },
-      { name: "Redux",        level: 78, icon: "/redux.png"       },
-      { name: "Framer Motion",level: 75, icon: "/framer.png"      },
-    ],
+    skills: UNIFIED_SKILLS.frontend.filter(s => 
+      ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML5", "CSS3", "Redux", "Framer Motion"].includes(s.name)
+    ).map(s => ({ name: s.name, level: s.level, icon: s.icon })),
   },
   {
     category: "Backend",
     color: "#7042f8",
     glow: "rgba(112,66,248,0.4)",
-    skills: [
-      { name: "Node.js",      level: 85, icon: "/node-js.png"     },
-      { name: "Express",      level: 82, icon: "/express.png"     },
-      { name: "PostgreSQL",   level: 75, icon: "/postger.png"     },
-      { name: "MongoDB",      level: 80, icon: "/mongodb.png"     },
-      { name: "Firebase",     level: 72, icon: "/Firebase.png"    },
-      { name: "GraphQL",      level: 65, icon: "/graphql.png"     },
-      { name: "Prisma",       level: 70, icon: "/prisma.webp"     },
-    ],
+    skills: UNIFIED_SKILLS.backend.filter(s => 
+      ["Node.js", "Express", "PostgreSQL", "MongoDB", "Firebase", "GraphQL", "Prisma", "Python", "Django"].includes(s.name)
+    ).map(s => ({ name: s.name, level: s.level, icon: s.icon })),
   },
   {
     category: "Otros",
     color: "#06b6d4",
     glow: "rgba(6,182,212,0.4)",
-    skills: [
-      { name: "Three.js",     level: 70, icon: "/react.png"       },
-      { name: "React Native", level: 68, icon: "/ReactNative .png" },
-      { name: "Docker",       level: 62, icon: "/docker.webp"     },
-      { name: "Figma",        level: 78, icon: "/figma.png"       },
-      { name: "Git",          level: 88, icon: "/gitwhite.png"    },
-      { name: "Go",           level: 45, icon: "/go.png"          },
-    ],
+    skills: UNIFIED_SKILLS.tools.map(s => ({ name: s.name, level: s.level, icon: s.icon })),
   },
 ];
 

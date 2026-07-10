@@ -5,6 +5,8 @@ import Head from 'next/head';
 import './css/style.css';
 import './styles/animations.css';
 import { useDynamicEffects } from './hooks/useDynamicEffects';
+import { SKILL_LEVELS } from '@/constants';
+import Timeline from '@/components/shared/Timeline';
 
 
 // --- SUB-COMPONENTES Y HOOKS DE LÓGICA (DEFINIDOS ANTES DE USAR) ---
@@ -37,10 +39,14 @@ const RunicContactForm = () => {
         if (Object.keys(validationErrors).length > 0) return;
         setStatus('loading');
         try {
-            const response = await fetch('https://mi-hoja-de-vida.onrender.com/contact', {
+            const response = await fetch('/api/contact', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-              body: JSON.stringify(formData)
+              body: JSON.stringify({
+                name: formData.username,
+                email: formData.email,
+                message: formData.message
+              })
             });
 
             if(response.ok) {
@@ -51,7 +57,7 @@ const RunicContactForm = () => {
             } else {
                 const result = await response.json();
                 setStatus('error');
-                setResponseMessage(result.detail || 'Error al enviar el mensaje. Inténtalo de nuevo.');
+                setResponseMessage(result.error || 'Error al enviar el mensaje. Inténtalo de nuevo.');
             }
         } catch (error) {
             setStatus('error');
@@ -298,7 +304,7 @@ const RunicPage = () => {
         }
     };
     
-    const navItems = ['Home', 'Formación', 'Proyectos', 'Habilidades', 'Certificados', 'Contactos'];
+    const navItems = ['Home', 'Formación', 'Proyectos', 'Experiencia', 'Habilidades', 'Certificados', 'Contactos'];
     const contactSpheres = [
       { icon: 'fas fa-envelope', title: 'Email', href: 'mailto:julian.estiven.gutierrez@correounivalle.edu.co', rune: 'ᚠ' },
       { icon: 'fas fa-phone', title: 'Teléfono', href: 'tel:+573234378971', rune: 'ᚢ' },
@@ -401,22 +407,144 @@ const RunicPage = () => {
                         <Carousel3D projects={projects} />
                     </section>
 
+                    <section id="experiencia" className="section runic-timeline-section">
+                        <div className="runic-timeline-header">
+                            <div className="eyebrow-runic">Crónica del desarrollador</div>
+                            <h2 className="runic-timeline-title">Proyectos y Experiencia</h2>
+                            <p className="runic-timeline-subtitle">
+                                Cada proyecto, forjado como una runa en la piedra: un problema real, una decisión técnica, un resultado medible.
+                            </p>
+                            <div className="rune-divider-timeline"></div>
+                        </div>
+
+                        <div className="timeline-wrap-runic">
+                            <div className="spine">
+                                <div className="spine-glow"></div>
+                                <div className="spine-ticks"></div>
+                                <div className="spine-pulse"></div>
+                            </div>
+
+                            {/* Nodos del timeline - ordenados cronológicamente */}
+                            {[
+                                { id: 8, side: 'left', rune: 'ᚦ', runeName: 'Thurisaz', title: 'Sistema Bancario', role: 'Desarrollador de Software', year: '2023', desc: 'Sistema de gestión bancaria completo con interfaz gráfica para operaciones financieras básicas.', tech: ['Python', 'Tkinter', 'POO'], achievements: ['Simulación de operaciones para +1000 transacciones diarias', 'Persistencia y seguridad de datos integrada', 'Interfaz intuitiva para usuarios no técnicos'], github: 'https://github.com/Karatsuyu/Banco.git' },
+                                { id: 7, side: 'right', rune: 'ᚹ', runeName: 'Wunjo', title: 'Lavadero App', role: 'Desarrollador Full Stack', year: '2023', desc: 'Aplicación para gestionar clientes y servicios: Backend REST + Frontend Desktop Tkinter.', tech: ['Django', 'DRF', 'Tkinter'], achievements: ['CRUD completo vía API REST', 'Interfaz desktop moderna', 'Gestión de múltiples servicios'], github: 'https://github.com/Karatsuyu/Lavelo-Pues.git' },
+                                { id: 6, side: 'left', rune: 'ᚲ', runeName: 'Kenaz', title: 'Portfolio Web', role: 'Desarrollador Frontend', year: '2024', desc: 'Sitio web responsive con sidebar, 8 proyectos, animaciones y modo oscuro/claro.', tech: ['HTML5', 'CSS3', 'JavaScript'], achievements: ['Diseño 100% responsive', 'Animaciones CSS avanzadas', 'Tema día/noche sin frameworks'], github: 'https://github.com/Karatsuyu/Mi-Hoja-De-Vida.git' },
+                                { id: 1, side: 'right', rune: 'ᚠ', runeName: 'Fehu', title: 'Tienda Online', role: 'Desarrollador Full Stack', year: '2024', desc: 'E-commerce completo con carrito de compras, autenticación y checkout.', tech: ['Next.js', 'FastAPI', 'Docker'], achievements: ['Flujo completo de compra', 'Contenedores Docker', '+500 productos en catálogo'], github: 'https://github.com/Karatsuyu/Tienda-Online.git' },
+                                { id: 3, side: 'left', rune: 'ᚱ', runeName: 'Raidho', title: 'ParkingPro SaaS', role: 'Arquitecto Full-Stack', year: '2024', desc: 'SaaS de gestión de parqueaderos con arquitectura escalable y soporte en tiempo real vía WebSockets.', tech: ['Node.js', 'PostgreSQL', 'Socket.IO'], achievements: ['Arquitectura en tiempo real', '200+ conexiones simultáneas', 'Calificación: 4.8 / 5.0'], github: 'https://github.com/Karatsuyu/parking-app.git' },
+                                { id: 4, side: 'right', rune: 'ᛉ', runeName: 'Algiz', title: 'Sistema Registral', role: 'Desarrollador Backend', year: '2024', desc: 'Sistema web para gestionar personas, documentos y generar reportes estadísticos.', tech: ['Node.js', 'Express', 'PostgreSQL'], achievements: ['Gestión de +10,000 registros', 'Sistema de roles avanzado', 'Auditoría de cambios completa'], github: 'https://github.com/Karatsuyu/Registradur-a-De-Colombia.git' },
+                                { id: 2, side: 'left', rune: 'ᚷ', runeName: 'Gebo', title: 'Delicious Food', role: 'Desarrollador Full Stack', year: '2024', desc: 'Plataforma de pedidos de comida con combos personalizados, pagos Stripe y comunidad social.', tech: ['Django', 'React', 'Stripe'], achievements: ['Integración con Stripe', 'Sistema de calificaciones', 'Personalización de productos'], github: 'https://github.com/Karatsuyu/delicious-food-app.git' },
+                                { id: 5, side: 'right', rune: 'ᚢ', runeName: 'Uruz', title: 'MiSalud', role: 'Desarrollador Full Stack', year: '2024', desc: 'Plataforma para registrar hábitos, contenido educativo y predicciones de salud con ML.', tech: ['Django', 'React Query', 'Tailwind'], achievements: ['Predicción de riesgo de salud', 'Dashboard interactivo', 'Interfaz para personal clínico'], github: 'https://github.com/Karatsuyu/Mi-Salud.git' },
+                            ].map((project, index) => (
+                                <div key={project.id} className={`timeline-node-runic ${project.side}`} style={{ top: `${(index + 1) * 350}px` }}>
+                                    {project.side === 'left' && (
+                                        <>
+                                            <div className="rune-frame-vertical">
+                                                <div className="project-card-runic">
+                                                    <span className="corner-rune">ᛊ</span>
+                                                    <span className="corner-rune">ᛊ</span>
+                                                    <span className="corner-rune">ᛊ</span>
+                                                    <span className="corner-rune">ᛊ</span>
+                                                    
+                                                    <div className="project-role-runic">{project.role}</div>
+                                                    <h3 className="project-title-runic">{project.title}</h3>
+                                                    <div className="project-year-runic">{project.year}</div>
+                                                    
+                                                    <p>{project.desc}</p>
+                                                    
+                                                    <div className="tech-stack-runic">
+                                                        {project.tech.map((tech, i) => (
+                                                            <span key={i} className="tech-item-runic">{tech}</span>
+                                                        ))}
+                                                    </div>
+                                                    
+                                                    <div className="achievements-runic">
+                                                        <h4>Logros</h4>
+                                                        <ul>
+                                                            {project.achievements.map((achievement, i) => (
+                                                                <li key={i}>{achievement}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                    
+                                                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="github-link-runic">
+                                                        <svg className="github-icon-runic" viewBox="0 0 24 24" fill="currentColor">
+                                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                                        </svg>
+                                                        Ver en GitHub
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div className="connector-runic"></div>
+                                            <div className="medallion-runic" data-rune-name={project.runeName}>
+                                                {project.rune}
+                                            </div>
+                                        </>
+                                    )}
+                                    {project.side === 'right' && (
+                                        <>
+                                            <div className="medallion-runic" data-rune-name={project.runeName}>
+                                                {project.rune}
+                                            </div>
+                                            <div className="connector-runic"></div>
+                                            <div className="rune-frame-vertical">
+                                                <div className="project-card-runic">
+                                                    <span className="corner-rune">ᛊ</span>
+                                                    <span className="corner-rune">ᛊ</span>
+                                                    <span className="corner-rune">ᛊ</span>
+                                                    <span className="corner-rune">ᛊ</span>
+                                                    
+                                                    <div className="project-role-runic">{project.role}</div>
+                                                    <h3 className="project-title-runic">{project.title}</h3>
+                                                    <div className="project-year-runic">{project.year}</div>
+                                                    
+                                                    <p>{project.desc}</p>
+                                                    
+                                                    <div className="tech-stack-runic">
+                                                        {project.tech.map((tech, i) => (
+                                                            <span key={i} className="tech-item-runic">{tech}</span>
+                                                        ))}
+                                                    </div>
+                                                    
+                                                    <div className="achievements-runic">
+                                                        <h4>Logros</h4>
+                                                        <ul>
+                                                            {project.achievements.map((achievement, i) => (
+                                                                <li key={i}>{achievement}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                    
+                                                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="github-link-runic">
+                                                        <svg className="github-icon-runic" viewBox="0 0 24 24" fill="currentColor">
+                                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                                        </svg>
+                                                        Ver en GitHub
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
                     <section id="habilidades" className="section runes-section">
                         <div className="runes-background-pattern"></div>
                         <div className="floating-runes" id="floatingRunesSection"></div>
                         <div className="runes-container">
                             <div className="runes-header"><h1>Habilidades</h1></div>
                             <div className="skills-container">
-                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-html5"></i></div><h3>HTML5</h3><div className="skill-level"><div className="skill-progress" style={{width:"50%"}}></div></div><p className="skill-description">Lenguaje de marcado que estructura la web moderna.</p></div>
-                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-css3-alt"></i></div><h3>CSS3</h3><div className="skill-level"><div className="skill-progress" style={{width:"50%"}}></div></div><p className="skill-description">Estilos y animaciones que dan vida a interfaces.</p></div>
-                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-js"></i></div><h3>JavaScript</h3><div className="skill-level"><div className="skill-progress" style={{width:"23%"}}></div></div><p className="skill-description">Interactividad y lógica para experiencias dinámicas.</p></div>
-                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-react"></i></div><h3>React</h3><div className="skill-level"><div className="skill-progress" style={{width:"19%"}}></div></div><p className="skill-description">Componentes modernos para interfaces reactivas.</p></div>
-                                <div className="rune-skill"><div className="rune-symbol"><i className="fas fa-paint-brush"></i></div><h3>UX/UI</h3><div className="skill-level"><div className="skill-progress" style={{width:"70%"}}></div></div><p className="skill-description">Diseño enfocado en la experiencia del usuario.</p></div>
-                                <div className="rune-skill"><div className="rune-symbol"><i className="fas fa-database"></i></div><h3>SQL</h3><div className="skill-level"><div className="skill-progress" style={{width:"50%"}}></div></div><p className="skill-description">Gestión de bases de datos relacionales.</p></div>
-                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-python"></i></div><h3>Python</h3><div className="skill-level"><div className="skill-progress" style={{width:"78%"}}></div></div><p className="skill-description">Lenguaje versátil para múltiples aplicaciones.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-html5"></i></div><h3>HTML5</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["HTML5"]}%`}}></div></div><p className="skill-description">Lenguaje de marcado que estructura la web moderna.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-css3-alt"></i></div><h3>CSS3</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["CSS3"]}%`}}></div></div><p className="skill-description">Estilos y animaciones que dan vida a interfaces.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-js"></i></div><h3>JavaScript</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["JavaScript"]}%`}}></div></div><p className="skill-description">Interactividad y lógica para experiencias dinámicas.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-react"></i></div><h3>React</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["React"]}%`}}></div></div><p className="skill-description">Componentes modernos para interfaces reactivas.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fas fa-paint-brush"></i></div><h3>UX/UI</h3><div className="skill-level"><div className="skill-progress" style={{width:"82%"}}></div></div><p className="skill-description">Diseño enfocado en la experiencia del usuario.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fas fa-database"></i></div><h3>SQL</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["PostgreSQL"]}%`}}></div></div><p className="skill-description">Gestión de bases de datos relacionales.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-python"></i></div><h3>Python</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Python"]}%`}}></div></div><p className="skill-description">Lenguaje versátil para múltiples aplicaciones.</p></div>
                                 <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-java"></i></div><h3>Java</h3><div className="skill-level"><div className="skill-progress" style={{width:"65%"}}></div></div><p className="skill-description">Programación orientada a objetos robusta.</p></div>
-                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-github"></i></div><h3>GitHub</h3><div className="skill-level"><div className="skill-progress" style={{width:"40%"}}></div></div><p className="skill-description">Control de versiones y colaboración.</p></div>
-                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-docker"></i></div><h3>Docker</h3><div className="skill-level"><div className="skill-progress" style={{width:"10%"}}></div></div><p className="skill-description">Containerización de aplicaciones.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-github"></i></div><h3>GitHub</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["GitHub"]}%`}}></div></div><p className="skill-description">Control de versiones y colaboración.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-docker"></i></div><h3>Docker</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Docker"]}%`}}></div></div><p className="skill-description">Containerización de aplicaciones.</p></div>
                             </div>
                         </div>
                     </section>

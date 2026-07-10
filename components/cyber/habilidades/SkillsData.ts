@@ -4,6 +4,8 @@
 //  Edita los niveles (0-100) y añade/quita skills
 // ============================================================
 
+import { SKILL_LEVELS } from '@/constants';
+
 export interface Skill {
   name: string;
   level: number;       // 0–100
@@ -149,15 +151,15 @@ export const SKILL_FILES: SkillFile[] = [
     icon: '⚛',
     color: '#00f5ff',
     skills: [
-      { name: 'HTML5 / CSS3',        level: 92, years: 4, highlight: true },
-      { name: 'JavaScript (ES6+)',   level: 88, years: 4, highlight: true },
-      { name: 'TypeScript',          level: 82, years: 2, highlight: true },
-      { name: 'React',               level: 86, years: 3, highlight: true },
-      { name: 'Next.js',             level: 80, years: 2, highlight: true },
-      { name: 'Tailwind CSS',        level: 85, years: 2, highlight: true },
+      { name: 'HTML5 / CSS3',        level: SKILL_LEVELS["HTML5"], years: 4, highlight: true },
+      { name: 'JavaScript (ES6+)',   level: SKILL_LEVELS["JavaScript"], years: 4, highlight: true },
+      { name: 'TypeScript',          level: SKILL_LEVELS["TypeScript"], years: 2, highlight: true },
+      { name: 'React',               level: SKILL_LEVELS["React"], years: 3, highlight: true },
+      { name: 'Next.js',             level: SKILL_LEVELS["Next.js"], years: 2, highlight: true },
+      { name: 'Tailwind CSS',        level: SKILL_LEVELS["Tailwind CSS"], years: 2, highlight: true },
       { name: 'Vite',                level: 78, years: 2 },
-      { name: 'Framer Motion',       level: 70, years: 1 },
-      { name: 'Three.js / R3F',      level: 66, years: 1 },
+      { name: 'Framer Motion',       level: SKILL_LEVELS["Framer Motion"], years: 1 },
+      { name: 'Three.js / R3F',      level: SKILL_LEVELS["Three.js"], years: 1 },
       { name: 'Responsive UI',       level: 84, years: 4 },
     ],
     code: frontendCode,
@@ -168,11 +170,11 @@ export const SKILL_FILES: SkillFile[] = [
     icon: '⬡',
     color: '#00ff88',
     skills: [
-      { name: 'Node.js',             level: 84, years: 3, highlight: true },
-      { name: 'Express.js',          level: 82, years: 3, highlight: true },
-      { name: 'Django',              level: 78, years: 2, highlight: true },
+      { name: 'Node.js',             level: SKILL_LEVELS["Node.js"], years: 3, highlight: true },
+      { name: 'Express.js',          level: SKILL_LEVELS["Express"], years: 3, highlight: true },
+      { name: 'Django',              level: SKILL_LEVELS["Django"], years: 2, highlight: true },
       { name: 'Django REST Framework', level: 76, years: 2 },
-      { name: 'FastAPI',             level: 70, years: 1 },
+      { name: 'FastAPI',             level: SKILL_LEVELS["FastAPI"], years: 1 },
       { name: 'REST APIs',           level: 86, years: 3, highlight: true },
       { name: 'JWT (SimpleJWT)',     level: 80, years: 2, highlight: true },
       { name: 'Socket.IO',           level: 74, years: 1 },
@@ -186,10 +188,10 @@ export const SKILL_FILES: SkillFile[] = [
     icon: '◈',
     color: '#a855f7',
     skills: [
-      { name: 'PostgreSQL',      level: 80, years: 2, highlight: true },
+      { name: 'PostgreSQL',      level: SKILL_LEVELS["PostgreSQL"], years: 2, highlight: true },
       { name: 'Redis',           level: 72, years: 1, highlight: true },
-      { name: 'SQLite',          level: 75, years: 2 },
-      { name: 'SQLAlchemy',      level: 70, years: 1 },
+      { name: 'SQLite',          level: SKILL_LEVELS["MySQL"], years: 2 },
+      { name: 'SQLAlchemy',      level: SKILL_LEVELS["Prisma"], years: 1 },
       { name: 'Supabase',        level: 62, years: 1 },
     ],
     code: databaseCode,
@@ -200,8 +202,8 @@ export const SKILL_FILES: SkillFile[] = [
     icon: '⚙',
     color: '#f0e040',
     skills: [
-      { name: 'Git / GitHub',       level: 85, years: 4, highlight: true },
-      { name: 'Docker / Compose',   level: 78, years: 2, highlight: true },
+      { name: 'Git / GitHub',       level: SKILL_LEVELS["GitHub"], years: 4, highlight: true },
+      { name: 'Docker / Compose',   level: SKILL_LEVELS["Docker"], years: 2, highlight: true },
       { name: 'VS Code',            level: 90, years: 4, highlight: true },
       { name: 'Linux / Bash',       level: 70, years: 2 },
       { name: 'Postman',            level: 80, years: 3 },

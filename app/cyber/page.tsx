@@ -22,6 +22,7 @@ function CyberNav() {
       <ul className="cyber-nav-links">
         {[
           ['Proyectos',    '/cyber/proyectos'],
+          ['Experiencia',  '/cyber/experiencia'],
           ['Habilidades',  '/cyber/habilidades'],
           ['Formación',    '/cyber/formacion'],
           ['Certificados', '/cyber/certificados'],

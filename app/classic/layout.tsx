@@ -44,6 +44,12 @@ export default function ClassicLayout({ children }: { children: React.ReactNode 
               </Link>
             </li>
             <li>
+              <Link href="/classic/experiencia" className="nav-link">
+                <i className="fas fa-timeline icon" />
+                <span className="text">Experiencia</span>
+              </Link>
+            </li>
+            <li>
               <Link href="/classic/habilidades" className="nav-link">
                 <i className="fas fa-laptop-code icon" />
                 <span className="text">Habilidades</span>

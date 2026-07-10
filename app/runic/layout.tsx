@@ -1,6 +1,7 @@
 // src/app/layout.tsx
 import './css/style.css';
 import './styles/animations.css';
+import './styles/globals.css';
 import type { Metadata } from 'next';
 
 export const metadata = {

@@ -25,53 +25,80 @@ const Footer = () => {
 
                 <div className="min-w-[200px] h-auto flex flex-col items-center justify-start">
                     <div className="font-bold text-[16px]">Community</div>
-                    <p className="flex flex-row items-center my-[15px] cursor-pointer">
-                        <FaYoutube />
-                        <span className="text-[15px] ml-[6px]">Youtube</span>    
-                    </p>
-                    <p className="flex flex-row items-center my-[15px] cursor-pointer">
+                    <a 
+                      href="https://github.com/Karatsuyu"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-row items-center my-[15px] cursor-pointer hover:text-purple-400 transition-colors"
+                    >
                         <RxGithubLogo />
                         <span className="text-[15px] ml-[6px]">Github</span>    
-                    </p>
-                    <p className="flex flex-row items-center my-[15px] cursor-pointer">
-                        <RxDiscordLogo />
-                        <span className="text-[15px] ml-[6px]">Discord</span>    
-                    </p>
+                    </a>
+                    <a 
+                      href="https://www.linkedin.com/in/julian-estiven-gutierrez-tabares-04119a382/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-row items-center my-[15px] cursor-pointer hover:text-purple-400 transition-colors"
+                    >
+                        <RxLinkedinLogo />
+                        <span className="text-[15px] ml-[6px]">LinkedIn</span>    
+                    </a>
                 </div>
                 <div className="min-w-[200px] h-auto flex flex-col items-center justify-start">
                     <div className="font-bold text-[16px]">Social Media</div>
-                    <p className="flex flex-row items-center my-[15px] cursor-pointer">
-                        <FaYoutube />
+                    <a 
+                      href="https://www.instagram.com/tabjulian07/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-row items-center my-[15px] cursor-pointer hover:text-purple-400 transition-colors"
+                    >
+                        <RxInstagramLogo />
                         <span className="text-[15px] ml-[6px]">Instagram</span>    
-                    </p>
-                    <p className="flex flex-row items-center my-[15px] cursor-pointer">
-                        <RxGithubLogo />
+                    </a>
+                    <a 
+                      href="https://x.com/JulinTabar7259"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-row items-center my-[15px] cursor-pointer hover:text-purple-400 transition-colors"
+                    >
+                        <RxTwitterLogo />
                         <span className="text-[15px] ml-[6px]">Twitter</span>    
-                    </p>
-                    <p className="flex flex-row items-center my-[15px] cursor-pointer">
-                        <RxDiscordLogo />
-                        <span className="text-[15px] ml-[6px]">Linkedin</span>    
-                    </p>
+                    </a>
+                    <a 
+                      href="https://www.linkedin.com/in/julian-estiven-gutierrez-tabares-04119a382/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-row items-center my-[15px] cursor-pointer hover:text-purple-400 transition-colors"
+                    >
+                        <RxLinkedinLogo />
+                        <span className="text-[15px] ml-[6px]">LinkedIn</span>    
+                    </a>
                 </div>
                 <div className="min-w-[200px] h-auto flex flex-col items-center justify-start">
                     <div className="font-bold text-[16px]">About</div>
-                   <p className="flex flex-row items-center my-[15px] cursor-pointer">
-                     
-                        <span className="text-[15px] ml-[6px]">Become Sponsor</span>    
-                    </p>
-                    <p className="flex flex-row items-center my-[15px] cursor-pointer">
-                      
-                        <span className="text-[15px] ml-[6px]">Learning about me</span>    
-                    </p>
-                    <p className="flex flex-row items-center my-[15px] cursor-pointer">
-                  
-                        <span className="text-[15px] ml-[6px]">julian.estiven.gutierrez@correounivalle.edu.co</span>    
-                    </p>
+                   <a 
+                      href="mailto:julian.estiven.gutierrez@correounivalle.edu.co"
+                      className="flex flex-row items-center my-[15px] cursor-pointer hover:text-purple-400 transition-colors"
+                    >
+                        <span className="text-[15px] ml-[6px]">Contact me</span>    
+                    </a>
+                    <a 
+                      href="#about-me"
+                      className="flex flex-row items-center my-[15px] cursor-pointer hover:text-purple-400 transition-colors"
+                    >
+                        <span className="text-[15px] ml-[6px]">Learn about me</span>    
+                    </a>
+                    <a 
+                      href="mailto:julian.estiven.gutierrez@correounivalle.edu.co"
+                      className="flex flex-row items-center my-[15px] cursor-pointer hover:text-purple-400 transition-colors text-sm"
+                    >
+                        <span className="text-[13px] ml-[6px]">julian.estiven.gutierrez@correounivalle.edu.co</span>    
+                    </a>
                 </div>
             </div>
 
             <div className="mb-[20px] text-[15px] text-center">
-                &copy; WebChain Dev 2023 Inc. All rights reserved
+                &copy; WebChain Dev 2024 Inc. All rights reserved
             </div>
         </div>
     </div>
