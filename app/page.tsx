@@ -2,7 +2,7 @@ import Hero from "@/components/main/Hero";
 import Skills from "@/components/main/Skills";
 import Encryption from "@/components/main/Encryption";
 import Projects from "@/components/main/Projects";
-import Experience from "@/components/main/Experience";
+import SpaceExperiencia from "@/components/main/SpaceExperiencia";
 import Formacion from "@/components/main/Formacion";
 import Certificados from "@/components/main/Certificados";
 import Contacto from "@/components/main/Contacto";
@@ -15,7 +15,7 @@ export default function Home() {
         <Skills />
         <Encryption />
         <Projects />
-        <Experience />
+        <SpaceExperiencia />
         <Formacion />
         <Certificados />
         <Contacto />

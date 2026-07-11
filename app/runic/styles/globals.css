@@ -129,14 +129,14 @@ html {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 2rem;
-  min-height: 4000px;
+  min-height: 3450px;
 }
 
 /* Spine central vertical */
 .spine {
   position: absolute;
   left: 50%;
-  top: 0;
+  top: 20px;
   bottom: 0;
   width: 2px;
   background: linear-gradient(
@@ -209,11 +209,11 @@ html {
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 1200px;
+  max-width: 1100px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 2rem;
+  gap: 0;
   z-index: 2;
   pointer-events: none;
 }
@@ -264,7 +264,7 @@ html {
 
 /* Conectores horizontales */
 .connector-runic {
-  width: 60px;
+  width: 100px;
   height: 2px;
   background: linear-gradient(90deg, var(--arcane, #b46bff), transparent);
   position: relative;
@@ -508,12 +508,22 @@ html {
 /* Alineación de tarjetas (izquierda/derecha) */
 .timeline-node-runic.left .project-card-runic {
   justify-self: end;
-  margin-right: 2rem;
+  margin-right: 0.5rem;
 }
 
 .timeline-node-runic.right .project-card-runic {
   justify-self: start;
-  margin-left: 2rem;
+  margin-left: 0.5rem;
+}
+
+/* Mover medallones del lado RIGHT (ᚹᚠᛉᚢ) hacia la derecha (hacia el centro) */
+.timeline-node-runic.right .medallion-runic {
+  position: relative;
+  left: 290px;
+}
+
+.timeline-node-runic.right .connector-runic {
+  width: 330px;
 }
 
 .timeline-node-runic.left .connector-runic {
@@ -557,7 +567,7 @@ html {
   }
 
   .timeline-wrap-runic {
-    min-height: 3500px;
+    min-height: 2950px;
     padding: 0 1rem;
   }
 

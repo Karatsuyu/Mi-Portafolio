@@ -2,6 +2,7 @@ import Hero from "@/components/main/Hero";
 import Skills from "@/components/main/Skills";
 import Encryption from "@/components/main/Encryption";
 import Projects from "@/components/main/Projects";
+import SpaceExperiencia from "@/components/main/SpaceExperiencia";
 import Formacion from "@/components/main/Formacion";
 import Certificados from "@/components/main/Certificados";
 import Contacto from "@/components/main/Contacto";
@@ -14,6 +15,7 @@ export default function SpacePage() {
         <Skills />
         <Encryption />
         <Projects />
+        <SpaceExperiencia />
         <Formacion />
         <Certificados />
         <Contacto />
