@@ -361,6 +361,20 @@ const RunicPage = () => {
                                 <a href="../classic" className="style-option">Classic</a>
                             </div>
                           </li>
+                          <li>
+                            <a 
+                              href="/api/generate-cv" 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="color-selector-btn"
+                              style={{ 
+                                textDecoration: 'none',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              CV
+                            </a>
+                          </li>
                         </ul>
                       </div>
                     </nav>

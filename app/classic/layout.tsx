@@ -94,6 +94,12 @@ export default function ClassicLayout({ children }: { children: React.ReactNode 
                 </span>
               </button>
             </li>
+            <li>
+              <a href="/api/generate-cv" target="_blank" rel="noopener noreferrer" className="nav-link" style={{ textDecoration: "none" }}>
+                <i className="fas fa-download icon" />
+                <span className="text">Descargar CV</span>
+              </a>
+            </li>
           </ul>
         </nav>
       </aside>

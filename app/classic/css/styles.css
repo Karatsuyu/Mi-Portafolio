@@ -253,6 +253,8 @@ body {
   flex-direction: column;
   transition: var(--transition);
   z-index: 100;
+  overflow-y: auto; /* Agregar scroll vertical */
+  overflow-x: hidden; /* Ocultar scroll horizontal */
 }
 
 .sidebar:hover {
@@ -264,10 +266,10 @@ body {
 
 .profile {
   text-align: center;
-  padding: 20px 10px;
+  padding: 15px 10px; /* Reducido de 20px a 15px */
   border-bottom: 1px solid #e2e8f0;
   /* Keep container stable so it doesn't deform on hover */
-  min-height: 120px;
+  min-height: 100px; /* Reducido de 120px a 100px */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -276,7 +278,7 @@ body {
 
 /* Keep same layout on hover (only text fades in via .name/.title rules) */
 .sidebar:hover .profile {
-  padding: 20px 10px;
+  padding: 15px 10px; /* Reducido de 20px a 15px para consistencia */
   border-bottom: 1px solid #e2e8f0;
 }
 
@@ -316,7 +318,7 @@ body {
 
 .nav-menu ul {
   list-style: none;
-  padding: 20px 0;
+  padding: 10px 0; /* Reducido de 20px a 10px para más espacio */
 }
 
 .nav-link {

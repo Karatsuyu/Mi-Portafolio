@@ -60,6 +60,14 @@ const HeroContent = () => {
           >
             Contáctame
           </a>
+          <a
+            href="/api/generate-cv"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-2 px-6 border border-[#7042f88b] text-center text-gray-300 cursor-pointer rounded-lg hover:border-purple-400 hover:text-white transition-colors"
+          >
+            Descargar CV
+          </a>
         </motion.div>
 
         {/* Stats rápidas */}

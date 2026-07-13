@@ -96,7 +96,7 @@ const ITEMS: ExpItem[] = [
     impactNum: 3,
     impactSuffix: "+",
     githubUrl: "https://github.com/Karatsuyu/Lavelo-Pues.git",
-    faIcon: "fas fa-car-wash",
+    faIcon: "fas fa-car",
   },
   {
     id: "portfolio-web",

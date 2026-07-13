@@ -109,6 +109,19 @@ export default function GlitchHero() {
           >
             $ contactar
           </Link>
+          <a
+            href="/api/generate-cv"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cyber-btn"
+            style={{
+              borderColor: 'rgba(186,85,211,0.4)',
+              color: 'var(--purple2)',
+              background: 'rgba(186,85,211,0.05)',
+            }}
+          >
+            📄 descargar_cv.pdf
+          </a>
         </motion.div>
 
         {/* Stats rápidas */}
