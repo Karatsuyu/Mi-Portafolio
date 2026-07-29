@@ -389,7 +389,7 @@ function ConstellationCanvas({
       if (!pointerDown) canvas.style.cursor = "grab";
     };
 
-    const onClick = (e: PointerEvent) => {
+    const onClick = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       const mx = e.clientX - rect.left;
       const my = e.clientY - rect.top;

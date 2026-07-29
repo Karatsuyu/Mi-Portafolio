@@ -203,8 +203,8 @@ const Skills = () => {
   // Stats globales
   const totalSkills = SKILL_GROUPS.reduce((a, g) => a + g.skills.length, 0);
   const avgLevel = Math.round(
-    SKILL_GROUPS.flatMap(g => g.skills).reduce((a, s) => a + s.level, 0) /
-    SKILL_GROUPS.flatMap(g => g.skills).length
+    SKILL_GROUPS.flatMap(g => g.skills as { name: string; level: number; icon: string }[]).reduce((a, s) => a + s.level, 0) /
+    SKILL_GROUPS.flatMap(g => g.skills as { name: string; level: number; icon: string }[]).length
   );
 
   return (
