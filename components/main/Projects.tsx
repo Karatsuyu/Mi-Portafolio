@@ -110,10 +110,11 @@ function useThreeScene(
   }, []); // eslint-disable-line
 }
 
-// ── HUD overlay ─────────────────────────────────────────────
+// ── HUD overlay (texto estilo Cryptaris) ───────────────────
 function HUDOverlay({ project }: { project: typeof SPACE_PROJECTS[0] }) {
   return (
     <div className="absolute inset-0 z-10 pointer-events-none select-none">
+      {/* Top-left: número + título */}
       <motion.div
         key={project.id + "tl"}
         initial={{ opacity: 0, x: -20 }}
@@ -124,17 +125,22 @@ function HUDOverlay({ project }: { project: typeof SPACE_PROJECTS[0] }) {
       >
         <div className="text-[11px] text-gray-500 tracking-[0.3em] uppercase mb-1">Mission</div>
         <div className="text-5xl font-thin text-white/20 leading-none">{project.num}</div>
-        <div className="text-[11px] tracking-[0.2em] uppercase mt-1" style={{ color: project.hexColor }}>
+        <div className="text-[11px] tracking-[0.2em] uppercase mt-1"
+          style={{ color: project.hexColor }}>
           {project.subtitle}
         </div>
       </motion.div>
 
+      {/* Bottom-left: línea de scan */}
       <div className="absolute bottom-8 left-0 right-0 flex items-center px-8 gap-3">
         <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        <div className="text-[9px] tracking-[0.3em] text-gray-600 uppercase">scanning...</div>
+        <div className="text-[9px] tracking-[0.3em] text-gray-600 uppercase">
+          scanning...
+        </div>
         <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       </div>
 
+      {/* Top-right: crosshair */}
       <div className="absolute top-6 right-8 flex flex-col items-end gap-1">
         <div className="flex gap-1">
           <div className="w-4 h-[1px] bg-white/20" />
@@ -143,8 +149,9 @@ function HUDOverlay({ project }: { project: typeof SPACE_PROJECTS[0] }) {
         <div className="text-[9px] text-gray-600 tracking-[0.2em]">SYS:ACTIVE</div>
       </div>
 
+      {/* Bordes de esquina */}
       {["top-0 left-0", "top-0 right-0 rotate-90", "bottom-0 right-0 rotate-180", "bottom-0 left-0 -rotate-90"].map((pos) => (
-        <div key={pos} className={`absolute ${pos} w-8 h-8`}>
+        <div key={pos} className={`absolute ${pos} w-8 h-8 pointer-events-none`}>
           <div className="absolute top-0 left-0 w-8 h-[1px] bg-white/15" />
           <div className="absolute top-0 left-0 w-[1px] h-8 bg-white/15" />
         </div>
@@ -168,59 +175,45 @@ function ProjectInfo({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.35 }}
-      className="absolute bottom-0 left-0 right-0 z-20 px-8 pb-10"
+      className="absolute bottom-0 left-0 right-0 z-20 px-8 pb-16"
     >
-      <div className="flex items-end justify-between gap-4">
-        {/* Info izquierda */}
-        <div className="max-w-md">
-          <h3 className="text-2xl font-bold text-white mb-1">{project.title}</h3>
-          <p className="text-gray-400 text-sm leading-relaxed mb-3 line-clamp-2">
-            {project.problem}
-          </p>
-          {/* Stack pills */}
-          <div className="flex flex-wrap gap-1.5">
-            {project.stack.slice(0, 4).map((t) => (
-              <span key={t} className="text-[10px] px-2 py-[3px] rounded-full"
-                style={{ borderColor: project.hexColor + "40", color: project.hexColor + "cc", background: project.hexColor + "10", border: "1px solid" }}>
-                {t}
-              </span>
-            ))}
-            {project.stack.length > 4 && (
-              <span className="text-[10px] px-2 py-[3px] rounded-full"
-                style={{ color: "rgba(200,200,220,0.35)", border: "1px solid rgba(200,200,220,0.1)" }}>
-                +{project.stack.length - 4}
-              </span>
-            )}
-          </div>
+      <div className="max-w-md">
+        <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
+        <p className="text-gray-400 text-sm leading-relaxed mb-4">{project.description}</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.stack.map((t) => (
+            <span key={t} className="text-[11px] px-2 py-1 rounded-full border"
+              style={{ borderColor: project.hexColor + "40", color: project.hexColor + "cc", background: project.hexColor + "10" }}>
+              {t}
+            </span>
+          ))}
         </div>
-
-        {/* Botones derecha */}
-        <div className="flex flex-col gap-2 flex-shrink-0 pointer-events-auto">
-          {/* BOTÓN PRINCIPAL — abre el modal */}
+        <div className="flex gap-3 pointer-events-auto">
+          {project.liveUrl && (
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
+              className="text-xs px-4 py-2 rounded text-black font-semibold"
+              style={{ background: project.hexColor }}>
+              ↗ Demo
+            </a>
+          )}
+          {project.repoUrl && (
+            <a href={project.repoUrl} target="_blank" rel="noopener noreferrer"
+              className="text-xs px-4 py-2 rounded border text-gray-300"
+              style={{ borderColor: project.hexColor + "50" }}>
+              ⌥ Repo
+            </a>
+          )}
           <motion.button
             onClick={onOpenModal}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all"
+            className="text-xs px-4 py-2 rounded border text-gray-300 transition-all"
             style={{
-              background: `linear-gradient(135deg, ${project.hexColor}40, ${project.hexColor}20)`,
-              border: `1px solid ${project.hexColor}60`,
-              color: "#fff",
-              boxShadow: `0 0 20px ${project.hexColor}30`,
+              borderColor: project.hexColor + "50",
             }}
           >
-            <span>◎</span>
-            Explorar misión
+            ◎ Ver completo
           </motion.button>
-
-          {/* GitHub */}
-          {project.repoUrl && (
-            <a href={project.repoUrl} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 px-5 py-2 rounded-lg text-xs text-gray-300 transition-all text-center justify-center"
-              style={{ border: `1px solid ${project.hexColor}30`, background: "rgba(0,0,0,0.3)" }}>
-              ⌥ Repositorio
-            </a>
-          )}
         </div>
       </div>
     </motion.div>
