@@ -3,8 +3,9 @@ import './css/style.css';
 import './styles/animations.css';
 import './styles/globals.css';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Hoja de vida — Julián Gutiérrez',
   description: 'Portafolio profesional de Julián Gutiérrez, Tecnólogo en Desarrollo de Software',
 };
@@ -19,11 +20,7 @@ export default function RootLayout({
       <head>
         {/* Fuentes */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@300;400;600&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+Runic&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@300;400;600&family=Noto+Sans+Runic&display=swap"
           rel="stylesheet"
         />
         <link

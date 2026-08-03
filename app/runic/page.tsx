@@ -7,6 +7,8 @@ import './styles/animations.css';
 import { useDynamicEffects } from './hooks/useDynamicEffects';
 import { SKILL_LEVELS } from '@/constants';
 import Timeline from '@/components/shared/Timeline';
+import RunicProjectModal, { RunicProject, RUNIC_PROJECTS } from './RunicProjectModal';
+import { AnimatePresence } from 'framer-motion';
 
 
 // --- SUB-COMPONENTES Y HOOKS DE LÓGICA (DEFINIDOS ANTES DE USAR) ---
@@ -107,7 +109,7 @@ interface Project {
     link: string;
 }
 
-const Carousel3D = ({ projects }: { projects: Project[] }) => {
+const Carousel3D = ({ projects, onOpenModal }: { projects: Project[], onOpenModal: (project: RunicProject) => void }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const innerRef = useRef<HTMLDivElement>(null);
     const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -217,7 +219,43 @@ const Carousel3D = ({ projects }: { projects: Project[] }) => {
                                     <h3>Tecnologías</h3><p>{p.tech}</p>
                                     <p><strong>Mi rol:</strong> {p.role}</p>
                                     <p><strong>Reto:</strong> {p.challenge}</p>
-                                    <a href={p.link} target="_blank" rel="noopener noreferrer" className="card-link" onClick={e => e.stopPropagation()}>Ver en GitHub →</a>
+                                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
+                                        <a href={p.link} target="_blank" rel="noopener noreferrer" className="card-link" onClick={e => e.stopPropagation()}>Ver en GitHub →</a>
+                                        <button 
+                                            className="card-link" 
+                                            style={{ 
+                                                background: 'rgba(148,0,255,0.15)', 
+                                                border: '1px solid rgba(148,0,255,0.3)', 
+                                                cursor: 'pointer',
+                                                padding: '0.4rem 0.8rem',
+                                                borderRadius: '6px',
+                                                fontSize: '0.75rem',
+                                                fontWeight: 600,
+                                                color: 'var(--accent)',
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                // Mapeo de títulos del carousel a títulos de RUNIC_PROJECTS
+                                                const titleMap: { [key: string]: string } = {
+                                                    "Tienda Online (E-commerce Full-Stack)": "Tienda Online",
+                                                    "Delicious Food - Delivery de Comida": "Delicious Food",
+                                                    "ParkingPro SaaS - Gestión de Parqueaderos": "ParkingPro SaaS",
+                                                    "Sistema de Gestión Registral": "Sistema Registral",
+                                                    "MiSalud - Health Risk Prediction App": "MiSalud",
+                                                    "Portfolio Profesional Web Full-Stack": "Portfolio Web",
+                                                    "App Cliente-Servidor de Lavadero": "Lavelo Pues",
+                                                    "Sistema de Gestión Bancaria": "Sistema Bancario"
+                                                };
+                                                const mappedTitle = titleMap[p.title] || p.title;
+                                                const runicProject = RUNIC_PROJECTS.find(rp => rp.title === mappedTitle);
+                                                if (runicProject) {
+                                                    onOpenModal(runicProject);
+                                                }
+                                            }}
+                                        >
+                                            Ver completo →
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -238,6 +276,7 @@ const RunicPage = () => {
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isCertModalOpen, setCertModalOpen] = useState(false);
     const [modalImageSrc, setModalImageSrc] = useState('');
+    const [modalProject, setModalProject] = useState<RunicProject | null>(null);
 
     const colorSelectorRef = useRef<HTMLLIElement>(null);
     const styleSelectorRef = useRef<HTMLLIElement>(null);
@@ -418,7 +457,7 @@ const RunicPage = () => {
                     <section id="proyectos" className="section">
                         <h2>Proyectos</h2>
                         <p>Proyectos destacados — arrastra para desplazarte y haz clic en una tarjeta para ver detalles.</p>
-                        <Carousel3D projects={projects} />
+                        <Carousel3D projects={projects} onOpenModal={setModalProject} />
                     </section>
 
                     <section id="experiencia" className="section runic-timeline-section">
@@ -617,6 +656,16 @@ const RunicPage = () => {
                          return <a key={item} href={`#${hrefId}`} onClick={(e) => handleNavClick(e, `#${hrefId}`)}>{item}</a>
                     })}
                 </div>
+
+                {/* Modal de proyectos Runic */}
+                <AnimatePresence>
+                    {modalProject && (
+                        <RunicProjectModal 
+                            project={modalProject} 
+                            onClose={() => setModalProject(null)} 
+                        />
+                    )}
+                </AnimatePresence>
             </div>
         </>
     );
