@@ -462,8 +462,10 @@ function LeftPanel({ p }: { p: RunicProject }) {
       padding: "1.5rem 1.2rem",
       borderRight: "1px solid rgba(148,0,255,0.2)",
       position: "relative",
-      overflow: "hidden",
+      overflowY: "auto",
       height: "100%",
+      scrollbarWidth: "thin",
+      scrollbarColor: "rgba(148,0,255,0.3) transparent",
     }}>
       {/* Runas decorativas en las esquinas */}
       {[
