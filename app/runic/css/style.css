@@ -910,15 +910,30 @@ h2{margin-top:0}
 
 @keyframes runePulse{
   0%,100%{
-    /* Cambiado a text-shadow para mejor performance */
     text-shadow: 
-      0 0 8px var(--accent-glow),
-      0 0 8px var(--accent-glow);
+      -1.2px -1.2px 0 #000,
+       1.2px -1.2px 0 #000,
+      -1.2px  1.2px 0 #000,
+       1.2px  1.2px 0 #000,
+      -1.2px  0px 0 #000,
+       1.2px  0px 0 #000,
+       0px  1.2px 0 #000,
+       0px -1.2px 0 #000,
+       0 0 8px var(--accent-glow),
+       0 0 8px var(--accent-glow);
   }
   50%{
     text-shadow: 
-      0 0 14px var(--accent-glow),
-      0 0 14px var(--accent-glow);
+      -1.2px -1.2px 0 #000,
+       1.2px -1.2px 0 #000,
+      -1.2px  1.2px 0 #000,
+       1.2px  1.2px 0 #000,
+      -1.2px  0px 0 #000,
+       1.2px  0px 0 #000,
+       0px  1.2px 0 #000,
+       0px -1.2px 0 #000,
+       0 0 14px var(--accent-glow),
+       0 0 14px var(--accent-glow);
   }
 }
 @keyframes skillGlow{0%,100%{background-position:200% 0}50%{background-position:-200% 0}}
