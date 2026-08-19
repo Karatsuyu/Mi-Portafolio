@@ -45,7 +45,7 @@ export const useDynamicEffects = () => {
 
         homeNebula.innerHTML = '';
 
-        const starCount = 150;
+        const starCount = 60;  // Reducido de 150 a 60 para mejor performance
         for (let i = 0; i < starCount; i++) {
             const s = document.createElement('span');
             s.className = 'star';
@@ -187,7 +187,8 @@ export const useDynamicEffects = () => {
             if (svg && ticksGroup) {
                 ticksGroup.innerHTML = ''; // Clear existing ticks
                 const ns = 'http://www.w3.org/2000/svg';
-                for (let i = 0; i < 360; i += 6) {
+                // Reducido de 360/6=60 a 360/12=30 ticks para mejor performance
+                for (let i = 0; i < 360; i += 12) {
                     const rad = i * Math.PI / 180;
                     const x1 = 250 + Math.cos(rad) * 220;
                     const y1 = 250 + Math.sin(rad) * 220;

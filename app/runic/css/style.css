@@ -175,10 +175,10 @@ h2{margin-top:0}
 .home-nebula .star{
   position:absolute;display:block;border-radius:50%;mix-blend-mode:screen;pointer-events:none;
   background:radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 20%, var(--accent) 50%, transparent 100%);
-  filter: drop-shadow(0 0 12px var(--accent-glow));
+  /* filter: drop-shadow() removido para mejor performance - box-shadow es suficiente */
   box-shadow: 0 0 10px var(--accent-glow);
   transform-origin:center;
-  will-change:opacity, transform, filter;
+  will-change:opacity, transform;
   /* combine visibility pulse (starTwinkle) with a glow pulse (starGlow) */
   animation: starTwinkle var(--star-dur,5s) ease-in-out var(--star-delay,0s) infinite,
             starGlow var(--star-glow-dur,2.8s) ease-in-out var(--star-delay,0s) infinite;
@@ -194,10 +194,10 @@ h2{margin-top:0}
 }
 
 @keyframes starGlow{
-  0%{ filter: drop-shadow(0 0 2px var(--accent-glow)); box-shadow: 0 0 4px var(--accent-glow); }
-  30%{ filter: drop-shadow(0 0 10px var(--accent-glow)); box-shadow: 0 0 14px var(--accent-glow); }
-  60%{ filter: drop-shadow(0 0 18px var(--accent-glow)); box-shadow: 0 0 24px var(--accent-glow); }
-  100%{ filter: drop-shadow(0 0 2px var(--accent-glow)); box-shadow: 0 0 4px var(--accent-glow); }
+  0%{ box-shadow: 0 0 4px var(--accent-glow); }
+  30%{ box-shadow: 0 0 14px var(--accent-glow); }
+  60%{ box-shadow: 0 0 24px var(--accent-glow); }
+  100%{ box-shadow: 0 0 4px var(--accent-glow); }
 }
 
 /* ensure text remains readable: subtle glass overlay near text area */
