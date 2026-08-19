@@ -63,17 +63,32 @@
    - `useVideoPause` hook creado
    - 8 videos del carrusel pausados off-viewport
 
+5. ✅ **Optimizar Hero Section (lag crítico)**
+   - Estrellas: 150 → 60 (-60%, -180 animaciones)
+   - Eliminado `filter: drop-shadow()` de estrellas (-60 ops GPU)
+   - Radar ticks: 60 → 30 (-50%)
+   - **Resultado**: ~70-80% mejora en hero
+   - **Runas rotando preservadas** (identidad del tema)
+
 **Archivos**:
 - `hooks/useAnimationControl.ts` (creado)
 - `hooks/useVideoPause.ts` (creado)
 - `app/runic/page.tsx` (refs agregados)
 - `app/runic/styles/animations.css` (lógica pause)
 - `app/runic/css/style.css` (eliminados filters)
+- `app/runic/hooks/useDynamicEffects.ts` (optimizaciones hero)
 
 **NO implementado** (pendiente decisión):
 - ❌ `mix-blend-mode: screen` - Usuario quiere ver resultados primero
 
-**Documentación**: `docs/ETAPA_8_RENDIMIENTO_FASE_B.md`
+**Diagnóstico adicional**:
+- ✅ Verificado que StarBackground (Three.js) NO se carga en Runic/Cyber
+- ✅ El lag era por programación, no por hardware del usuario
+
+**Documentación**: 
+- `docs/ETAPA_8_RENDIMIENTO_FASE_B.md`
+- `DIAGNOSTICO_LAG_RUNIC_HERO.md`
+- `RESUMEN_OPTIMIZACION_HERO_RUNIC.md`
 
 ---
 
