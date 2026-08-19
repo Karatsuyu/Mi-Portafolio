@@ -13,6 +13,33 @@
   100% { transform: translate(var(--tx), var(--ty)) rotate(360deg); opacity: 0; }
 }
 
+/* Pausar animaciones por defecto, activarlas solo cuando la sección es visible */
+.runes-section .floating-rune {
+  animation-play-state: paused;
+}
+
+.runes-section.is-visible .floating-rune {
+  animation-play-state: running;
+}
+
+/* Pausar otras animaciones pesadas fuera del viewport */
+.home-nebula .star {
+  animation-play-state: paused;
+}
+
+.home-nebula.is-visible .star {
+  animation-play-state: running;
+}
+
+.semicircle-runes {
+  animation-play-state: paused;
+}
+
+.hero-content.is-visible ~ * .semicircle-runes,
+.hero-section.is-visible .semicircle-runes {
+  animation-play-state: running;
+}
+
 @keyframes starTwinkle {
   0% { opacity: 0; transform: scale(0.6); }
   8% { opacity: 0.85; transform: scale(1.15); }

@@ -5,6 +5,8 @@ import Head from 'next/head';
 import './css/style.css';
 import './styles/animations.css';
 import { useDynamicEffects } from './hooks/useDynamicEffects';
+import { useAnimationControl } from '@/hooks/useAnimationControl';
+import { useVideoPause } from '@/hooks/useVideoPause';
 import { SKILL_LEVELS } from '@/constants';
 import Timeline from '@/components/shared/Timeline';
 import RunicProjectModal, { RunicProject, RUNIC_PROJECTS } from './RunicProjectModal';
@@ -292,6 +294,13 @@ const RunicPage = () => {
 
     const colorSelectorRef = useRef<HTMLLIElement>(null);
     const styleSelectorRef = useRef<HTMLLIElement>(null);
+    
+    // Hook para pausar animaciones fuera del viewport
+    const skillsSectionRef = useAnimationControl<HTMLElement>(0.1);
+    const heroSectionRef = useAnimationControl<HTMLDivElement>(0.1);
+    
+    // Hook para pausar videos fuera del viewport
+    const projectsSectionRef = useVideoPause<HTMLElement>(0.1);
 
     useDynamicEffects();
 
@@ -430,7 +439,7 @@ const RunicPage = () => {
                       </div>
                     </nav>
                     <div className="menu-nebula" aria-hidden="true"></div>
-                    <div className="hero-inner container" id="home">
+                    <div className="hero-inner container" id="home" ref={heroSectionRef}>
                       <div className="home-nebula" aria-hidden="true"></div>
                       <div className="hero-left">
                         <div className="radar-container">
@@ -466,7 +475,7 @@ const RunicPage = () => {
                         </div>
                     </section>
 
-                    <section id="proyectos" className="section">
+                    <section id="proyectos" className="section" ref={projectsSectionRef}>
                         <h2>Proyectos</h2>
                         <p>Proyectos destacados — arrastra para desplazarte y haz clic en una tarjeta para ver detalles.</p>
                         <Carousel3D projects={projects} onOpenModal={setModalProject} />
@@ -594,7 +603,7 @@ const RunicPage = () => {
                         </div>
                     </section>
 
-                    <section id="habilidades" className="section runes-section">
+                    <section id="habilidades" className="section runes-section" ref={skillsSectionRef}>
                         <div className="runes-background-pattern"></div>
                         <div className="floating-runes" id="floatingRunesSection"></div>
                         <div className="runes-container">
