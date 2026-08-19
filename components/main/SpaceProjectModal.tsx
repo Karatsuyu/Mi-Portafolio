@@ -25,6 +25,7 @@ import React, {
 } from "react";
 import * as THREE from "three";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 
 // ═══════════════════════════════════════════════════════════════
 //  TIPOS
@@ -753,6 +754,7 @@ export const SPACE_PROJECTS: SpaceProject[] = [
 function ModalParticlesCanvas({ color }: { color: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const colorRef  = useRef(color);
+  const isPageVisible = usePageVisibility();
   colorRef.current = color;
 
   useEffect(() => {
@@ -798,6 +800,13 @@ function ModalParticlesCanvas({ color }: { color: number }) {
     let t = 0;
     const animate = () => {
       raf = requestAnimationFrame(animate);
+      
+      // Pause animation when page is hidden
+      if (!isPageVisible) {
+        renderer.render(scene, camera);
+        return;
+      }
+      
       t += 0.006;
       pts.rotation.y = t * 0.2;
       shape.rotation.y += 0.015;
@@ -823,7 +832,7 @@ function ModalParticlesCanvas({ color }: { color: number }) {
       window.removeEventListener("resize", onResize);
       renderer.dispose();
     };
-  }, []);
+  }, [isPageVisible]);
 
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
 }

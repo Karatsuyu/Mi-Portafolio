@@ -21,10 +21,18 @@ export default function RootLayout({
   return (
     <html lang="es" data-theme="dark">
       <head>
+        {/* Preconnect for faster font loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+        
+        {/* Fonts: Poppins (400,600,700), Inter (300,400,600), Noto Sans Runic */}
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@300;400;600&family=Noto+Sans+Runic&display=swap"
           rel="stylesheet"
         />
+        
+        {/* Font Awesome */}
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"

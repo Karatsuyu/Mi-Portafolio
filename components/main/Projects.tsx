@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import { slideInFromTop } from "@/utils/motion";
 import SpaceProjectModal, { SPACE_PROJECTS } from "./SpaceProjectModal";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
+import { useInViewport } from "@/hooks/useInViewport";
 
 // ── Escena Three.js: terreno wireframe + forma central ──────
 function useThreeScene(
@@ -13,6 +15,10 @@ function useThreeScene(
 ) {
   const rafRef   = useRef<number>(0);
   const colorRef = useRef(activeColor);
+  const isPageVisible = usePageVisibility();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInViewport = useInViewport(containerRef);
+  
   colorRef.current = activeColor;
 
   useEffect(() => {
@@ -81,6 +87,13 @@ function useThreeScene(
     let t = 0;
     const animate = () => {
       rafRef.current = requestAnimationFrame(animate);
+      
+      // Pause animation when page is hidden or off-viewport
+      if (!isPageVisible || !isInViewport) {
+        renderer.render(scene, camera);
+        return;
+      }
+      
       t += 0.008;
       shape.rotation.y += 0.012;
       shape.rotation.x += 0.006;
@@ -107,7 +120,9 @@ function useThreeScene(
       window.removeEventListener("resize", onResize);
       renderer.dispose();
     };
-  }, []); // eslint-disable-line
+  }, [isPageVisible, isInViewport]); // eslint-disable-line
+  
+  return containerRef;
 }
 
 // ── HUD overlay (texto estilo Cryptaris) ───────────────────
@@ -223,8 +238,12 @@ function ProjectInfo({
 // ── Canvas wrapper ───────────────────────────────────────────
 function TerrainCanvas({ activeColor }: { activeColor: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  useThreeScene(canvasRef, activeColor);
-  return <canvas ref={canvasRef} className="w-full h-full" style={{ display: "block" }} />;
+  const containerRef = useThreeScene(canvasRef, activeColor);
+  return (
+    <div ref={containerRef} className="w-full h-full">
+      <canvas ref={canvasRef} className="w-full h-full" style={{ display: "block" }} />
+    </div>
+  );
 }
 
 // ── Componente principal ─────────────────────────────────────

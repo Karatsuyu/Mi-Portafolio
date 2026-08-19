@@ -7,6 +7,7 @@ import { OrbitControls, Float, MeshDistortMaterial, Sphere, Torus, Stars } from 
 import * as THREE from 'three';
 import { motion } from 'framer-motion';
 import { isWebGLAvailable } from '@/utils/webgl';
+import { usePageVisibility } from '@/hooks/usePageVisibility';
 
 const USE_SPLINE = true;
 const SPLINE_SCENE_URL = 'https://prod.spline.design/vxWjLMlors8Buvrx/scene.splinecode';
@@ -36,9 +37,10 @@ class ErrorBoundary extends (require('react').Component as typeof import('react'
 // ── Geometría central: esfera distorsionada holográfica ──────
 function CoreSphere() {
   const meshRef = useRef<THREE.Mesh>(null);
+  const isPageVisible = usePageVisibility();
 
   useFrame(state => {
-    if (!meshRef.current) return;
+    if (!meshRef.current || !isPageVisible) return;
     const t = state.clock.getElapsedTime();
     meshRef.current.rotation.y = t * 0.15;
     meshRef.current.rotation.z = Math.sin(t * 0.3) * 0.1;
@@ -72,9 +74,10 @@ function OrbitalRing({ radius, tilt, color, speed }: {
   speed: number;
 }) {
   const ref = useRef<THREE.Mesh>(null);
+  const isPageVisible = usePageVisibility();
 
   useFrame(state => {
-    if (!ref.current) return;
+    if (!ref.current || !isPageVisible) return;
     ref.current.rotation.z = state.clock.getElapsedTime() * speed;
   });
 
@@ -92,6 +95,7 @@ function OrbitalRing({ radius, tilt, color, speed }: {
 // ── Partículas flotantes tipo datos ─────────────────────────
 function DataParticles({ count = 120 }: { count?: number }) {
   const ref = useRef<THREE.Points>(null);
+  const isPageVisible = usePageVisibility();
 
   const [positions, colors] = useMemo(() => {
     const pos  = new Float32Array(count * 3);
@@ -118,7 +122,7 @@ function DataParticles({ count = 120 }: { count?: number }) {
   }, [count]);
 
   useFrame(state => {
-    if (!ref.current) return;
+    if (!ref.current || !isPageVisible) return;
     ref.current.rotation.y = state.clock.getElapsedTime() * 0.04;
     ref.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.08) * 0.1;
   });
@@ -165,8 +169,10 @@ function HologramGrid() {
 function Lights() {
   const light1Ref = useRef<THREE.PointLight>(null);
   const light2Ref = useRef<THREE.PointLight>(null);
+  const isPageVisible = usePageVisibility();
 
   useFrame(state => {
+    if (!isPageVisible) return;
     const t = state.clock.getElapsedTime();
     if (light1Ref.current) {
       light1Ref.current.position.x = Math.sin(t * 0.7) * 3;

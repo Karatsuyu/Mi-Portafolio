@@ -3,7 +3,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import LayoutContent from "@/components/global/LayoutContent";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: 'swap',
+  preload: true,
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://tu-dominio.com'), // TODO: Reemplazar con tu dominio real

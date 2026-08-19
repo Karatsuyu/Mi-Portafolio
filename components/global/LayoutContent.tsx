@@ -2,8 +2,14 @@
 
 import React from "react";
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 
-import StarsCanvas from "@/components/main/StarBackground";
+// Dynamic import for Three.js component (only loads when needed)
+const StarsCanvas = dynamic(() => import("@/components/main/StarBackground"), {
+  ssr: false,
+  loading: () => null,
+});
+
 import Navbar from "@/components/main/Navbar";
 import Footer from "@/components/main/Footer";
 
