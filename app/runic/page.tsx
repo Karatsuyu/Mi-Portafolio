@@ -14,7 +14,7 @@ import { AnimatePresence } from 'framer-motion';
 // --- SUB-COMPONENTES Y HOOKS DE LÓGICA (DEFINIDOS ANTES DE USAR) ---
 
 const RunicContactForm = () => {
-    const [formData, setFormData] = useState({ username: '', email: '', message: '' });
+    const [formData, setFormData] = useState({ username: '', email: '', message: '', website: '' });
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [responseMessage, setResponseMessage] = useState('');
@@ -47,7 +47,8 @@ const RunicContactForm = () => {
               body: JSON.stringify({
                 name: formData.username,
                 email: formData.email,
-                message: formData.message
+                message: formData.message,
+                website: formData.website
               })
             });
 
@@ -55,7 +56,7 @@ const RunicContactForm = () => {
                 const result = await response.json();
                 setStatus('success');
                 setResponseMessage(result.message || '¡Mensaje enviado con éxito! Te responderé pronto.');
-                setFormData({ username: '', email: '', message: '' });
+                setFormData({ username: '', email: '', message: '', website: '' });
             } else {
                 const result = await response.json();
                 setStatus('error');
@@ -72,6 +73,17 @@ const RunicContactForm = () => {
         <div className="runic-contact-form">
             <h2 className="form-header">Envíame un mensaje</h2>
             <form id="contactForm" className="contact-form-futuristic" onSubmit={handleSubmit} noValidate>
+                 {/* Honeypot field - hidden from users */}
+                 <input 
+                    type="text" 
+                    name="website" 
+                    value={formData.website}
+                    onChange={handleInputChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    style={{ position: 'absolute', left: '-9999px' }}
+                    aria-hidden="true"
+                  />
                  <div className="form-group">
                     <label htmlFor="username" className="form-label">Nombre completo *</label>
                     <input type="text" id="username" name="username" className="form-input" placeholder="Tu nombre completo" required minLength={2} value={formData.username} onChange={handleInputChange} />
@@ -343,7 +355,7 @@ const RunicPage = () => {
         }
     };
     
-    const navItems = ['Home', 'Formación', 'Proyectos', 'Experiencia', 'Habilidades', 'Certificados', 'Contactos'];
+    const navItems = ['Home', 'Formación', 'Proyectos', 'Experiencia', 'Habilidades', 'Certificados', 'Contacto'];
     const contactSpheres = [
       { icon: 'fas fa-envelope', title: 'Email', href: 'mailto:julian.estiven.gutierrez@correounivalle.edu.co', rune: 'ᚠ' },
       { icon: 'fas fa-phone', title: 'Teléfono', href: 'tel:+573234378971', rune: 'ᚢ' },
@@ -621,7 +633,7 @@ const RunicPage = () => {
                     </section>
 
                     <section id="contacto" className="section contact-section">
-                        <h2>Contactos</h2>
+                        <h2>Contacto</h2>
                         <div className="hanging-spheres-container">
                             <div className="background-stars-contact" aria-hidden="true"></div>
                             <div className="hanging-spheres">

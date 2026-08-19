@@ -4,8 +4,11 @@ import Script from "next/script";
 import "./css/styles.css";
 
 export const metadata: Metadata = {
-  title: "Portfolio Clásico",
-  description: "Layout con sidebar + contenido principal (estilo clásico)",
+  title: "Portfolio Clásico | Julián Gutiérrez",
+  description: "Portafolio con diseño clásico y profesional - Layout con sidebar y navegación tradicional | Portfolio with classic and professional design - Layout with sidebar and traditional navigation",
+  alternates: {
+    canonical: 'https://tu-dominio.com/classic',
+  },
 };
 
 export default function ClassicLayout({ children }: { children: React.ReactNode }) {

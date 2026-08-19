@@ -17,6 +17,15 @@ export default function ClassicContacto() {
       <div className="contact-form-container">
         <h3>Envíame un mensaje</h3>
         <form id="contactForm" className="contact-form">
+          {/* Honeypot field - hidden from users */}
+          <input 
+            type="text" 
+            name="website" 
+            tabIndex={-1}
+            autoComplete="off"
+            style={{ position: 'absolute', left: '-9999px' }}
+            aria-hidden="true"
+          />
           <div className="form-group">
             <label htmlFor="username">Nombre completo *</label>
             <input type="text" id="username" name="username" required minLength={2} maxLength={100} placeholder="Tu nombre completo" />

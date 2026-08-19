@@ -2,11 +2,14 @@ import type { Metadata } from 'next';
 import './styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'Tu Nombre — Cyber Portfolio',
-  description: 'Full Stack Developer · React · Node.js · Three.js',
+  title: 'Julián Gutiérrez — Cyber Portfolio | Desarrollador Full-Stack',
+  description: 'Portafolio cyberpunk con estética neon - Full Stack Developer especializado en React, Node.js y Three.js | Cyberpunk portfolio with neon aesthetics',
   openGraph: {
-    title: 'Tu Nombre — Cyber Portfolio',
-    description: 'Full Stack Developer · Cyber Edition',
+    title: 'Julián Gutiérrez — Cyber Portfolio',
+    description: 'Full Stack Developer · Cyber Edition · Estética Cyberpunk',
+  },
+  alternates: {
+    canonical: 'https://tu-dominio.com/cyber',
   },
 };
 

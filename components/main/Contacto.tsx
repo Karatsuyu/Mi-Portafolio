@@ -836,11 +836,11 @@ function PlanetSystem({
 }
 
 // ── Formulario de contacto ──────────────────────────────────
-type FormState = { name: string; email: string; message: string };
+type FormState = { name: string; email: string; message: string; website: string };
 type Status = "idle" | "sending" | "success" | "error";
 
 function ContactForm() {
-  const [form, setForm] = useState<FormState>({ name: "", email: "", message: "" });
+  const [form, setForm] = useState<FormState>({ name: "", email: "", message: "", website: "" });
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Partial<FormState>>({});
 
@@ -863,11 +863,11 @@ function ContactForm() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ name: form.name, email: form.email, message: form.message, website: form.website }),
       });
       if (!res.ok) throw new Error();
       setStatus("success");
-      setForm({ name: "", email: "", message: "" });
+      setForm({ name: "", email: "", message: "", website: "" });
     } catch {
       setStatus("error");
     }
@@ -900,6 +900,17 @@ function ContactForm() {
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {/* Honeypot field - hidden from users */}
+        <input 
+          type="text" 
+          name="website" 
+          value={form.website} 
+          onChange={e=>setForm({...form,website:e.target.value})} 
+          tabIndex={-1}
+          autoComplete="off"
+          style={{ position: 'absolute', left: '-9999px' }}
+          aria-hidden="true"
+        />
         <div className="grid grid-cols-2 gap-4">
           <div>
             <input placeholder="Nombre" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} className={inputCls("name")} />

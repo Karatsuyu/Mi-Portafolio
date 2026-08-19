@@ -931,7 +931,7 @@ function DetailCard({
               className="text-[9px] font-mono tracking-[0.2em] uppercase mb-3"
               style={{ color: item.glowColor + "70" }}
             >
-              // stack tecnológico
+              {/* stack tecnológico */}
             </div>
             <div className="flex flex-wrap gap-2">
               {item.stack.map((t) => (
@@ -963,7 +963,7 @@ function DetailCard({
                 className="text-[9px] font-mono tracking-[0.2em] uppercase mb-2"
                 style={{ color: item.glowColor + "70" }}
               >
-                // resultado
+                {/* resultado */}
               </div>
               <p className="text-sm text-white leading-relaxed">{item.result}</p>
             </div>

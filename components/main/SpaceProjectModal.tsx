@@ -875,25 +875,25 @@ function TabVision({ project }: { project: SpaceProject }) {
 
       {/* Problema */}
       <div className="rounded-xl p-5" style={{ background: "rgba(239,68,68,0.05)", border: "1px solid rgba(239,68,68,0.15)" }}>
-        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-red-400/60 mb-2">// El problema</div>
+        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-red-400/60 mb-2">{/* El problema */}</div>
         <p className="text-gray-300 text-sm leading-relaxed">{project.problem}</p>
       </div>
 
       {/* Solución */}
       <div className="rounded-xl p-5" style={{ background: "rgba(16,185,129,0.05)", border: "1px solid rgba(16,185,129,0.15)" }}>
-        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-emerald-400/60 mb-2">// La solución</div>
+        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-emerald-400/60 mb-2">{/* La solución */}</div>
         <p className="text-gray-300 text-sm leading-relaxed">{project.solution}</p>
       </div>
 
       {/* Rol */}
       <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${project.hexColor}20` }}>
-        <div className="text-[10px] font-mono tracking-[0.25em] uppercase mb-2" style={{ color: project.hexColor + "80" }}>// Mi rol</div>
+        <div className="text-[10px] font-mono tracking-[0.25em] uppercase mb-2" style={{ color: project.hexColor + "80" }}>{/* Mi rol */}</div>
         <p className="text-gray-300 text-sm">{project.role}</p>
       </div>
 
       {/* Highlights */}
       <div>
-        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600 mb-3">// Logros clave</div>
+        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600 mb-3">{/* Logros clave */}</div>
         <ul className="flex flex-col gap-2">
           {project.highlights.map((h, i) => (
             <motion.li key={i}
@@ -915,7 +915,7 @@ function TabVision({ project }: { project: SpaceProject }) {
 function TabMetricas({ project }: { project: SpaceProject }) {
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600">// Métricas de impacto</div>
+      <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600">{/* Métricas de impacto */}</div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {project.metrics.map((m, i) => (
           <motion.div key={i}
@@ -946,7 +946,7 @@ function TabMetricas({ project }: { project: SpaceProject }) {
 
       {/* Stack chips */}
       <div>
-        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600 mb-3">// Stack completo</div>
+        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600 mb-3">{/* Stack completo */}</div>
         <div className="flex flex-wrap gap-2">
           {project.stack.map((t) => (
             <span key={t} className="text-xs px-3 py-1 rounded-full font-mono"
@@ -965,7 +965,7 @@ function TabArquitectura({ project }: { project: SpaceProject }) {
     <div className="flex flex-col gap-6">
       {/* Capas */}
       <div>
-        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600 mb-3">// Capas de arquitectura</div>
+        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600 mb-3">{/* Capas de arquitectura */}</div>
         <div className="flex flex-col gap-3">
           {project.archLayers.map((layer, i) => (
             <motion.div key={i}
@@ -1001,7 +1001,7 @@ function TabArquitectura({ project }: { project: SpaceProject }) {
 
       {/* Patrones */}
       <div>
-        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600 mb-3">// Patrones de diseño</div>
+        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600 mb-3">{/* Patrones de diseño */}</div>
         <div className="flex flex-wrap gap-2">
           {project.patterns.map((p, i) => (
             <motion.span key={i}
@@ -1086,7 +1086,7 @@ function TabGaleria({ project }: { project: SpaceProject }) {
 function TabDesafios({ project }: { project: SpaceProject }) {
   return (
     <div className="flex flex-col gap-4">
-      <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600">// Retos técnicos superados</div>
+      <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600">{/* Retos técnicos superados */}</div>
       {project.challenges.map((c, i) => (
         <motion.div key={i}
           initial={{ opacity: 0, y: 16 }}
@@ -1138,7 +1138,7 @@ function TabSCC({ project }: { project: SpaceProject }) {
 
       {/* Mini mapa de cobertura */}
       <div>
-        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600 mb-2">// Cobertura SCC.E.1 → SCC.E.9</div>
+        <div className="text-[10px] font-mono tracking-[0.25em] uppercase text-gray-600 mb-2">{/* Cobertura SCC.E.1 → SCC.E.9 */}</div>
         <div className="flex gap-1.5 flex-wrap">
           {ALL_SCC.map(code => {
             const covered = coveredCodes.has(code);

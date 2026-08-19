@@ -63,17 +63,17 @@ const StarBackground = (props: any) => {
 
 const StarsCanvas = () => {
   const pathname = usePathname();
-  // Hide star background on Classic routes only
-  if (pathname?.startsWith("/classic")) {
-    return null;
-  }
-
   const [webglOk, setWebglOk] = useState<boolean | null>(null);
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     setWebglOk(isWebGLAvailable());
   }, []);
+
+  // Hide star background on Classic routes only
+  if (pathname?.startsWith("/classic")) {
+    return null;
+  }
 
   if (disabled || webglOk === false) return null;
   if (webglOk === null) return null;

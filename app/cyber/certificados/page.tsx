@@ -544,7 +544,7 @@ export default function CertificadosPage() {
             color: 'rgba(200,216,232,0.18)', textAlign: 'center',
             padding: '4rem 0',
           }}>
-            // no certificates in this category
+            {/* no certificates in this category */}
           </p>
         )}
       </main>

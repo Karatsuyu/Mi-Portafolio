@@ -94,6 +94,7 @@ function SendForm({
   const [name,    setName]    = useState('');
   const [email,   setEmail]   = useState('');
   const [message, setMessage] = useState(initialMessage);
+  const [website, setWebsite] = useState('');
   const [sending, setSending] = useState(false);
   const [error,   setError]   = useState('');
 
@@ -138,7 +139,7 @@ function SendForm({
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({ name, email, message, website }),
       });
 
       if (!res.ok) throw new Error('Server error');
@@ -191,8 +192,20 @@ function SendForm({
         letterSpacing: '0.12em',
         marginBottom: '0.25rem',
       }}>
-        // formulario de contacto — Ctrl+Enter para enviar · Esc para cancelar
+        {/* formulario de contacto — Ctrl+Enter para enviar · Esc para cancelar */}
       </div>
+
+      {/* Honeypot field - hidden from users */}
+      <input 
+        type="text" 
+        name="website" 
+        value={website}
+        onChange={e => setWebsite(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        style={{ position: 'absolute', left: '-9999px' }}
+        aria-hidden="true"
+      />
 
       <div>
         <label style={labelStyle}>Nombre</label>

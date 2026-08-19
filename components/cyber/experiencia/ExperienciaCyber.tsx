@@ -425,7 +425,7 @@ function DetailPanel({ item, onClose }: { item: ExperienciaItem; onClose: () => 
           {item.result && (
             <div className="p-4" style={{ border: `1px solid ${item.accentColor}25`, background: item.accentColor + "0a" }}>
               <div className="text-[10px] font-mono tracking-widest mb-2" style={{ color: item.accentColor + "60" }}>
-                // RESULTADO
+                {/* RESULTADO */}
               </div>
               <p className="text-sm text-white leading-relaxed">{item.result}</p>
             </div>

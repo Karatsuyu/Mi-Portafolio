@@ -82,7 +82,7 @@ function InfoPanel() {
           textTransform: 'uppercase',
           marginBottom: '0.75rem',
         }}>
-          // whois
+          {/* whois */}
         </p>
 
         {[
@@ -123,7 +123,7 @@ function InfoPanel() {
           textTransform: 'uppercase',
           marginBottom: '0.75rem',
         }}>
-          // links directos
+          {/* links directos */}
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -173,7 +173,7 @@ function InfoPanel() {
         color: 'rgba(200,216,232,0.2)',
         lineHeight: 1.9,
       }}>
-        <div style={{ color: 'rgba(0,245,255,0.3)', marginBottom: '0.4rem' }}>// comandos rápidos</div>
+        <div style={{ color: 'rgba(0,245,255,0.3)', marginBottom: '0.4rem' }}>{/* comandos rápidos */}</div>
         {[
           ['help',       'ver todos los comandos'],
           ['--info',     'mi información'],
@@ -273,7 +273,7 @@ export default function ContactoPage() {
             Terminal CLI interactivo — escribe{' '}
             <span style={{ color: 'var(--cyan)' }}>help</span>
             {' '}para empezar o{' '}
-            <span style={{ color: 'var(--green)' }}>--send "tu mensaje"</span>
+            <span style={{ color: 'var(--green)' }}>--send &quot;tu mensaje&quot;</span>
             {' '}para contactar directo
           </p>
         </motion.div>
@@ -312,7 +312,7 @@ export default function ContactoPage() {
             marginTop: '1.5rem', letterSpacing: '0.08em',
           }}
         >
-          // también puedes usar los links directos del panel · el terminal guarda historial de sesión
+          {/* también puedes usar los links directos del panel · el terminal guarda historial de sesión */}
         </motion.p>
       </main>
 
