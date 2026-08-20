@@ -63,12 +63,22 @@
    - `useVideoPause` hook creado
    - 8 videos del carrusel pausados off-viewport
 
-5. ✅ **Optimizar Hero Section (lag crítico)**
+5. ✅ **Optimizar Hero Section (lag crítico - Fase 1)**
    - Estrellas: 150 → 60 (-60%, -180 animaciones)
    - Eliminado `filter: drop-shadow()` de estrellas (-60 ops GPU)
    - Radar ticks: 60 → 30 (-50%)
    - **Resultado**: ~70-80% mejora en hero
    - **Runas rotando preservadas** (identidad del tema)
+
+6. ✅ **Optimizar Hero Section (lag residual - Fase 2)**
+   - `.menu-nebula` blur: 6px → 3px (-50%)
+   - `.home-nebula` blur: 3px → 1.5px (-50%)
+   - Eliminados 4 filters GPU-heavy (saturate/contrast)
+   - Gradientes radiales: 3 → 2 (-33%)
+   - Agregadas optimizaciones GPU (translateZ, backface-visibility)
+   - **Resultado**: ~35-45% mejora adicional
+   - **Radar completamente intacto** (blur 30px preservado)
+   - **Runas rotando intactas** (identidad del tema)
 
 **Archivos**:
 - `hooks/useAnimationControl.ts` (creado)
@@ -89,6 +99,7 @@
 - `docs/ETAPA_8_RENDIMIENTO_FASE_B.md`
 - `DIAGNOSTICO_LAG_RUNIC_HERO.md`
 - `RESUMEN_OPTIMIZACION_HERO_RUNIC.md`
+- `OPTIMIZACION_NEBULOSAS_RUNIC.md`
 
 ---
 

@@ -41,41 +41,216 @@ export const useDynamicEffects = () => {
 
     const nebulaStars = useCallback(() => {
         const homeNebula = document.querySelector('.home-nebula');
-        if (!homeNebula) return;
-
-        homeNebula.innerHTML = '';
-
-        const starCount = 60;  // Reducido de 150 a 60 para mejor performance
-        for (let i = 0; i < starCount; i++) {
-            const s = document.createElement('span');
-            s.className = 'star';
-            s.style.left = `${Math.random() * 100}%`;
-            s.style.top = `${Math.random() * 110 - 5}%`;
-
-            const rand = Math.random();
-            let size;
-            if (rand < 0.6) {
-                size = Math.random() * 1.5 + 1.5;
-            } else if (rand < 0.85) {
-                size = Math.random() * 2 + 3;
-            } else {
-                size = Math.random() * 3 + 5;
-            }
-            s.style.width = `${size}px`;
-            s.style.height = `${size}px`;
-
-            const dur = (Math.random() * 6 + 4).toFixed(2);
-            const delay = (Math.random() * 8).toFixed(2);
-            const glowDur = (Math.random() * 3 + 1.4).toFixed(2);
-            s.style.setProperty('--star-dur', dur + 's');
-            s.style.setProperty('--star-delay', delay + 's');
-            s.style.setProperty('--star-glow-dur', glowDur + 's');
-
-            s.style.opacity = '0';
-            if (size > 4.5) s.style.opacity = '0.85';
-
-            homeNebula.appendChild(s);
+        if (!homeNebula) {
+            console.warn('home-nebula not found');
+            return;
         }
+
+        // Limpiar canvas previo si existe
+        const existingCanvas = homeNebula.querySelector('canvas');
+        if (existingCanvas) existingCanvas.remove();
+
+        // Crear canvas
+        const canvas = document.createElement('canvas');
+        canvas.className = 'rune-canvas';
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            console.error('Canvas context not available');
+            return;
+        }
+
+        homeNebula.appendChild(canvas);
+        console.log('Canvas created and appended');
+
+        // Runas completas
+        const runes = ['ᚠ', 'ᚡ', 'ᚢ', 'ᚣ', 'ᚤ', 'ᚥ', 'ᚦ', 'ᚧ', 'ᚨ', 'ᚩ', 'ᚪ', 'ᚫ', 'ᚬ', 'ᚭ', 'ᚮ', 'ᚯ', 
+                      'ᚰ', 'ᚱ', 'ᚲ', 'ᚳ', 'ᚴ', 'ᚵ', 'ᚶ', 'ᚷ', 'ᚸ', 'ᚹ', 'ᚺ', 'ᚻ', 'ᚼ', 'ᚽ', 'ᚾ', 'ᚿ',
+                      'ᛀ', 'ᛁ', 'ᛂ', 'ᛃ', 'ᛄ', 'ᛅ', 'ᛆ', 'ᛇ', 'ᛈ', 'ᛉ', 'ᛊ', 'ᛋ', 'ᛌ', 'ᛍ', 'ᛎ', 'ᛏ',
+                      'ᛐ', 'ᛑ', 'ᛒ', 'ᛓ', 'ᛔ', 'ᛕ', 'ᛖ', 'ᛗ', 'ᛘ', 'ᛙ', 'ᛚ', 'ᛛ', 'ᛜ', 'ᛝ', 'ᛞ', 'ᛟ',
+                      'ᛠ', 'ᛡ', 'ᛢ', 'ᛣ', 'ᛤ', 'ᛥ', 'ᛦ', 'ᛧ', 'ᛨ', 'ᛩ', 'ᛪ'];
+
+        let W: number, H: number;
+        
+        // Función para obtener el hue actual directamente del CSS
+        const getCurrentHue = (): number => {
+            const accentHue = getComputedStyle(document.documentElement).getPropertyValue('--accent-hue').trim();
+            const hue = parseInt(accentHue);
+            return isNaN(hue) ? 280 : hue;
+        };
+        
+        // Log inicial
+        console.log(`[Canvas Runes] Initial hue: ${getCurrentHue()}`);
+
+        const resize = () => {
+            const rect = homeNebula.getBoundingClientRect();
+            W = canvas.width = rect.width * window.devicePixelRatio;
+            H = canvas.height = rect.height * window.devicePixelRatio;
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+            console.log(`Canvas resized: ${rect.width}x${rect.height}, DPR: ${window.devicePixelRatio}`);
+        };
+
+        class Rune {
+            layer: number;
+            size: number;
+            x: number;
+            y: number;
+            vy: number;
+            vx: number;
+            rotation: number;
+            rotationSpeed: number;
+            char: string;
+            opacity: number;
+            maxOpacity: number;
+            life: number;
+            maxLife: number;
+            pulse: number;
+            pulseSpeed: number;
+
+            constructor(layer: number) {
+                this.layer = layer; // 0=far, 1=mid, 2=near
+                this.pulse = 0;
+                this.pulseSpeed = 0;
+                this.size = 0;
+                this.x = 0;
+                this.y = 0;
+                this.vy = 0;
+                this.vx = 0;
+                this.rotation = 0;
+                this.rotationSpeed = 0;
+                this.char = '';
+                this.opacity = 0;
+                this.maxOpacity = 0;
+                this.life = 0;
+                this.maxLife = 0;
+                this.reset(true);
+            }
+
+            reset(initial = false) {
+                const layerScale = [0.5, 0.8, 1.1][this.layer];
+                this.size = (20 + Math.random() * 40) * layerScale * window.devicePixelRatio;
+                this.x = Math.random() * W;
+                this.y = initial ? Math.random() * H : H + this.size;
+                this.vy = -(0.15 + Math.random() * 0.4) * layerScale * window.devicePixelRatio;
+                this.vx = (Math.random() - 0.5) * 0.2 * window.devicePixelRatio;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.004;
+                this.char = runes[Math.floor(Math.random() * runes.length)];
+                this.opacity = 0;
+                // Opacidad optimizada para visibilidad
+                this.maxOpacity = [0.4, 0.6, 0.8][this.layer] * (0.8 + Math.random() * 0.2);
+                this.life = 0;
+                this.maxLife = 600 + Math.random() * 600;
+                this.pulse = Math.random() * Math.PI * 2;
+                this.pulseSpeed = 0.01 + Math.random() * 0.02;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.rotation += this.rotationSpeed;
+                this.pulse += this.pulseSpeed;
+                this.life++;
+
+                // fade in / out
+                const fadeIn = 120;
+                const fadeOut = 180;
+                if (this.life < fadeIn) {
+                    this.opacity = (this.life / fadeIn) * this.maxOpacity;
+                } else if (this.life > this.maxLife - fadeOut) {
+                    this.opacity = ((this.maxLife - this.life) / fadeOut) * this.maxOpacity;
+                } else {
+                    this.opacity = this.maxOpacity;
+                }
+
+                // Pulso sinusoidal suave
+                this.opacity *= 0.7 + 0.3 * Math.sin(this.pulse);
+
+                if (this.life >= this.maxLife || this.y < -this.size * 2) {
+                    this.reset();
+                }
+            }
+
+            draw(context: CanvasRenderingContext2D, currentHue: number) {
+                context.save();
+                context.translate(this.x, this.y);
+                context.rotate(this.rotation);
+                context.font = `${this.size}px serif`;
+                context.textAlign = 'center';
+                context.textBaseline = 'middle';
+                
+                // Primera pasada con shadow grande - USA EL HUE ACTUAL
+                context.shadowColor = `hsla(${currentHue}, 100%, 70%, ${this.opacity})`;
+                context.shadowBlur = 40 * window.devicePixelRatio;
+                context.fillStyle = `hsla(${currentHue}, 70%, 80%, ${this.opacity})`;
+                context.fillText(this.char, 0, 0);
+
+                // Segunda pasada para brillo intenso - USA EL HUE ACTUAL
+                context.shadowBlur = 60 * window.devicePixelRatio;
+                context.fillStyle = `hsla(${currentHue}, 100%, 90%, ${this.opacity * 0.6})`;
+                context.fillText(this.char, 0, 0);
+                
+                context.restore();
+            }
+        }
+
+        const runeList: Rune[] = [];
+        // OPTIMIZADO: Reducido de [40, 30, 15] a [20, 15, 10] = 45 runas total (47% menos)
+        const counts = [20, 15, 10]; // lejos, medio, cerca
+        
+        for (let layer = 0; layer < 3; layer++) {
+            for (let i = 0; i < counts[layer]; i++) {
+                runeList.push(new Rune(layer));
+            }
+        }
+        
+        console.log(`Created ${runeList.length} runes`);
+
+        let animationFrameId: number;
+        let lastFrameTime = performance.now();
+        const targetFPS = 60;
+        const frameInterval = 1000 / targetFPS;
+        
+        const animate = (currentTime: number) => {
+            const deltaTime = currentTime - lastFrameTime;
+            
+            // Throttle a 60 FPS máximo
+            if (deltaTime < frameInterval) {
+                animationFrameId = requestAnimationFrame(animate);
+                return;
+            }
+            
+            lastFrameTime = currentTime - (deltaTime % frameInterval);
+            
+            // Limpiar canvas
+            ctx.clearRect(0, 0, W, H);
+
+            // Runas ordenadas por capa (lejos primero) - OPTIMIZADO: sort solo una vez
+            if (runeList.length > 0 && runeList[0].life % 100 === 0) {
+                runeList.sort((a, b) => a.layer - b.layer);
+            }
+            
+            runeList.forEach(r => {
+                r.update();
+                r.draw(ctx, getCurrentHue()); // Leer el hue actual del CSS en cada frame
+            });
+
+            animationFrameId = requestAnimationFrame(animate);
+        };
+
+        resize();
+        window.addEventListener('resize', resize);
+        animate(performance.now());
+        console.log('Animation started');
+
+        // Cleanup
+        return () => {
+            window.removeEventListener('resize', resize);
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            console.log('Canvas cleanup');
+        };
     }, []);
 
     const circuitAnimation = useCallback(() => {
@@ -225,13 +400,14 @@ export const useDynamicEffects = () => {
 
     useEffect(() => {
         floatingRunes();
-        nebulaStars();
+        const nebulaCleanup = nebulaStars(); // nebulaStars returns a cleanup function
         const circuitCleanup = circuitAnimation(); // circuitAnimation returns a cleanup function
         contactStars();
         radarTicks();
         contactSpheresHoverEffect();
 
         return () => {
+            if (nebulaCleanup) nebulaCleanup();
             if (circuitCleanup) circuitCleanup();
         };
     }, [floatingRunes, nebulaStars, circuitAnimation, contactStars, radarTicks, contactSpheresHoverEffect]);

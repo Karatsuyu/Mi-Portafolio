@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Canvas Runas</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0b0815;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0b0815 0%, #1a0f2e 100%);
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="runeCanvas"></canvas>
+        <div class="info">
+            <div>Canvas Test - Runas Flotantes</div>
+            <div id="runeCount"></div>
+            <div id="canvasSize"></div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('runeCanvas');
+        const ctx = canvas.getContext('2d');
+        const runes = "ᚠ ᚡ ᚢ ᚣ ᚤ ᚥ ᚦ ᚧ ᚨ ᚩ ᚪ ᚫ ᚬ ᚭ ᚮ ᚯ ᚰ ᚱ ᚲ ᚳ ᚴ ᚵ ᚶ ᚷ ᚸ ᚹ ᚺ ᚻ ᚼ ᚽ ᚾ ᚿ ᛀ ᛁ ᛂ ᛃ ᛄ ᛅ ᛆ ᛇ ᛈ ᛉ ᛊ ᛋ ᛌ ᛍ ᛎ ᛏ ᛐ ᛑ ᛒ ᛓ ᛔ ᛕ ᛖ ᛗ ᛘ ᛙ ᛚ ᛛ ᛜ ᛝ ᛞ ᛟ ᛠ ᛡ ᛢ ᛣ ᛤ ᛥ ᛦ ᛧ ᛨ ᛩ ᛪ".split(' ');
+        
+        let W, H;
+
+        function resize() {
+            W = canvas.width = window.innerWidth * devicePixelRatio;
+            H = canvas.height = window.innerHeight * devicePixelRatio;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            document.getElementById('canvasSize').textContent = `Size: ${window.innerWidth}x${window.innerHeight} (DPR: ${devicePixelRatio})`;
+        }
+
+        class Rune {
+            constructor(layer) {
+                this.layer = layer;
+                this.reset(true);
+            }
+
+            reset(initial = false) {
+                const layerScale = [0.5, 0.8, 1.1][this.layer];
+                this.size = (20 + Math.random() * 40) * layerScale * devicePixelRatio;
+                this.x = Math.random() * W;
+                this.y = initial ? Math.random() * H : H + this.size;
+                this.vy = -(0.15 + Math.random() * 0.4) * layerScale * devicePixelRatio;
+                this.vx = (Math.random() - 0.5) * 0.2 * devicePixelRatio;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.004;
+                this.char = runes[Math.floor(Math.random() * runes.length)];
+                this.opacity = 0;
+                this.maxOpacity = [0.15, 0.3, 0.55][this.layer] * (0.6 + Math.random() * 0.4);
+                this.life = 0;
+                this.maxLife = 600 + Math.random() * 600;
+                this.hue = 280; // magenta
+                this.pulse = Math.random() * Math.PI * 2;
+                this.pulseSpeed = 0.01 + Math.random() * 0.02;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.rotation += this.rotationSpeed;
+                this.pulse += this.pulseSpeed;
+                this.life++;
+
+                const fadeIn = 120;
+                const fadeOut = 180;
+                if (this.life < fadeIn) {
+                    this.opacity = (this.life / fadeIn) * this.maxOpacity;
+                } else if (this.life > this.maxLife - fadeOut) {
+                    this.opacity = ((this.maxLife - this.life) / fadeOut) * this.maxOpacity;
+                } else {
+                    this.opacity = this.maxOpacity;
+                }
+
+                this.opacity *= 0.7 + 0.3 * Math.sin(this.pulse);
+
+                if (this.life >= this.maxLife || this.y < -this.size * 2) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.font = `${this.size}px serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                ctx.shadowColor = `hsla(${this.hue}, 70%, 60%, ${this.opacity})`;
+                ctx.shadowBlur = 20 * devicePixelRatio;
+                ctx.fillStyle = `hsla(${this.hue}, 55%, 70%, ${this.opacity})`;
+                ctx.fillText(this.char, 0, 0);
+
+                ctx.shadowBlur = 40 * devicePixelRatio;
+                ctx.fillStyle = `hsla(${this.hue}, 80%, 80%, ${this.opacity * 0.3})`;
+                ctx.fillText(this.char, 0, 0);
+                
+                ctx.restore();
+            }
+        }
+
+        const runeList = [];
+        const counts = [40, 30, 15];
+        
+        for (let layer = 0; layer < 3; layer++) {
+            for (let i = 0; i < counts[layer]; i++) {
+                runeList.push(new Rune(layer));
+            }
+        }
+
+        document.getElementById('runeCount').textContent = `Runas: ${runeList.length}`;
+
+        function animate() {
+            ctx.clearRect(0, 0, W, H);
+            
+            runeList.sort((a, b) => a.layer - b.layer);
+            runeList.forEach(r => {
+                r.update();
+                r.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        resize();
+        window.addEventListener('resize', resize);
+        animate();
+
+        console.log('Test canvas started with', runeList.length, 'runes');
+    </script>
+</body>
+</html>

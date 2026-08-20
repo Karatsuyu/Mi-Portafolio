@@ -116,6 +116,26 @@ h2{margin-top:0}
   top: -72px; /* position the nebula to start behind the fixed menu */
   left: 0;
   right: 0;
+  height: calc(100% + 80px); /* extend a bit more to ensure coverage */
+  z-index:1; /* behind hero-left/right content which have z-index:2 */
+  pointer-events:none;
+  opacity:0.55;
+  background-repeat:no-repeat;
+  background-size:cover;
+  /* layered soft purple clouds (2 gradientes optimizados) */
+  background-image:
+    radial-gradient(circle at 12% 22%, var(--accent-glow) 0%, var(--accent-light) 10%, transparent 34%),
+    radial-gradient(circle at 82% 72%, var(--accent-dark) 0%, var(--accent-muted) 12%, transparent 34%);
+    /* Optimizado: eliminado 3er gradiente central para mejor performance */
+  mix-blend-mode: normal;
+  filter: blur(1.5px); /* Optimizado: reducido de 3px, removidos saturate/contrast */
+  transition:opacity .35s ease, transform .4s ease;
+  will-change:background-position; /* Optimizado: solo background-position */
+  transform: translateZ(0); /* Optimización GPU */
+  backface-visibility: hidden; /* Optimización rendering */
+  animation: nebulaDrift 40s linear infinite;
+}
+
 /* ------------------ Nebulosa fija bajo el menú ------------------ */
 .menu-nebula{
   position:fixed;
@@ -132,11 +152,13 @@ h2{margin-top:0}
     radial-gradient(circle at 92% 50%, var(--accent-dark) 0%, var(--accent-muted) 12%, transparent 40%);
   background-repeat:no-repeat;
   background-size: 40% 120%, 40% 120%;
-  filter: blur(6px) saturate(1.02) contrast(1.02);
+  filter: blur(3px); /* Optimizado: reducido de 6px, removidos saturate/contrast */
   mix-blend-mode: screen;
   transition: opacity .3s ease, transform .4s ease;
-  will-change: transform, opacity, background-position;
+  will-change: background-position; /* Optimizado: solo background-position */
   animation: menuNebulaDrift 30s linear infinite;
+  transform: translateZ(0); /* Optimización GPU */
+  backface-visibility: hidden; /* Optimización rendering */
 }
 
 @keyframes menuNebulaDrift{
@@ -145,59 +167,25 @@ h2{margin-top:0}
 }
 
 @media(max-width:720px){
-  .menu-nebula{ height:64px; opacity:0.85; filter: blur(5px); }
-}
-  height: calc(100% + 80px); /* extend a bit more to ensure coverage */
-  z-index:1; /* behind hero-left/right content which have z-index:2 */
-  pointer-events:none;
-  opacity:0.55;
-  background-repeat:no-repeat;
-  background-size:cover;
-  /* layered soft purple clouds (slightly stronger / larger) */
-  background-image:
-    radial-gradient(circle at 12% 22%, var(--accent-glow) 0%, var(--accent-light) 10%, transparent 34%),
-    radial-gradient(circle at 82% 72%, var(--accent-dark) 0%, var(--accent-muted) 12%, transparent 34%),
-    radial-gradient(circle at 50% 48%, var(--accent-muted) 0%, transparent 48%);
-  mix-blend-mode: normal;
-  filter: saturate(1.06) contrast(1.03) blur(3px);
-  transition:opacity .35s ease, transform .4s ease;
-  will-change:transform,background-position,opacity;
+  .menu-nebula{ height:64px; opacity:0.85; filter: blur(2.5px); } /* Optimizado: reducido de 5px */
 }
 
 /* slow drifting of the nebula clouds to feel alive */
 @keyframes nebulaDrift {
-  from{ background-position: 0% 0%, 0% 0%, 0% 0%; }
-  to{ background-position: 6% 3%, -6% -4%, 3% -2%; }
-}
-.home-nebula{ animation: nebulaDrift 40s linear infinite; }
-
-/* stars container will be populated by JS with many .star elements */
-.home-nebula .star{
-  position:absolute;display:block;border-radius:50%;mix-blend-mode:screen;pointer-events:none;
-  background:radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 20%, var(--accent) 50%, transparent 100%);
-  /* filter: drop-shadow() removido para mejor performance - box-shadow es suficiente */
-  box-shadow: 0 0 10px var(--accent-glow);
-  transform-origin:center;
-  will-change:opacity, transform;
-  /* combine visibility pulse (starTwinkle) with a glow pulse (starGlow) */
-  animation: starTwinkle var(--star-dur,5s) ease-in-out var(--star-delay,0s) infinite,
-            starGlow var(--star-glow-dur,2.8s) ease-in-out var(--star-delay,0s) infinite;
+  from{ background-position: 0% 0%, 0% 0%; } /* Optimizado: 2 gradientes */
+  to{ background-position: 6% 3%, -6% -4%; }
 }
 
-@keyframes starTwinkle{
-  0%{ opacity:0; transform:scale(0.6); }
-  8%{ opacity:0.85; transform:scale(1.15); }
-  35%{ opacity:1; transform:scale(1); }
-  65%{ opacity:0.75; transform:scale(0.95); }
-  90%{ opacity:0.5; transform:scale(0.85); }
-  100%{ opacity:0; transform:scale(0.6); }
-}
-
-@keyframes starGlow{
-  0%{ box-shadow: 0 0 4px var(--accent-glow); }
-  30%{ box-shadow: 0 0 14px var(--accent-glow); }
-  60%{ box-shadow: 0 0 24px var(--accent-glow); }
-  100%{ box-shadow: 0 0 4px var(--accent-glow); }
+/* Canvas para runas animadas de fondo */
+.home-nebula .rune-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
+  z-index: 1; /* Asegurar que esté encima del fondo pero debajo del contenido */
 }
 
 /* ensure text remains readable: subtle glass overlay near text area */
@@ -213,7 +201,7 @@ h2{margin-top:0}
 
 /* On small screens reduce nebula intensity */
 @media (max-width: 720px){
-  .home-nebula{ opacity:0.75; filter: blur(1.2px) saturate(0.95); }
+  .home-nebula{ opacity:0.75; filter: blur(1px); } /* Optimizado: reducido de 1.2px */
 }
 
 .radar-glow {

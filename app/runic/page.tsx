@@ -319,6 +319,9 @@ const RunicPage = () => {
         document.documentElement.style.setProperty('--accent-dark', `hsla(${hue}, 100%, 30%, 0.7)`);
         document.documentElement.style.setProperty('--accent-muted', `hsla(${hue}, 100%, 60%, 0.5)`);
         
+        // Disparar evento personalizado para que el canvas lo detecte
+        window.dispatchEvent(new CustomEvent('themeColorChange', { detail: { hue } }));
+        
         localStorage.setItem('selectedColor', activeColor);
     }, [activeColor]);
 
