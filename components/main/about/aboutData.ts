@@ -21,6 +21,9 @@ export interface Competencia {
   code: string;
   title: string;
   description: string;
+  color: "purple" | "red" | "cyan" | "green" | "pink" | "orange" | "blue" | "lime" | "magenta";
+  tag: string;
+  icons: string[];
 }
 
 export const COMPETENCIAS: Competencia[] = [
@@ -29,53 +32,80 @@ export const COMPETENCIAS: Competencia[] = [
     title: "Fundamentos de Computación",
     description:
       "Utilizo los conocimientos fundamentales en teoría de la computación en la construcción de sistemas basados en TIC.",
+    color: "purple",
+    tag: "Teoría",
+    icons: ["</>", "∑"],
   },
   {
     code: "SCC.E.2",
     title: "Calidad de Software",
     description:
       "Evalúo factores de calidad estandarizados durante la valoración de uno o varios productos de software.",
+    color: "red",
+    tag: "Calidad",
+    icons: ["✓", "⚙"],
   },
   {
     code: "SCC.E.3",
     title: "Paradigmas y Lenguajes",
     description:
       "Selecciono y utilizo diferentes paradigmas y lenguajes de programación al construir sistemas basados en TIC.",
+    color: "cyan",
+    tag: "Paradigmas",
+    icons: ["JS", "Py", "TS"],
   },
   {
     code: "SCC.E.4",
     title: "Diseño de Interfaces",
     description:
       "Aplico conceptos y principios implicados en el proceso de diseño de interfaces gráficas de usuario durante el desarrollo de aplicaciones software.",
+    color: "green",
+    tag: "Diseño UX",
+    icons: ["UI", "✦"],
   },
   {
     code: "SCC.E.5",
     title: "Evaluación de Usabilidad",
     description:
       "Aplico técnicas de evaluación de usabilidad que permiten medir la calidad de la experiencia que tienen los usuarios al interactuar con el software que desarrollo.",
+    color: "pink",
+    tag: "Usabilidad",
+    icons: ["UX", "◎"],
   },
   {
     code: "SCC.E.6",
     title: "Infraestructura de TIC",
     description:
       "Implemento proyectos de infraestructura de TIC comprendiendo las características propias de las tecnologías de transporte de datos.",
+    color: "orange",
+    tag: "Infraestructura",
+    icons: ["◉", "⇄"],
   },
   {
     code: "SCC.E.7",
     title: "Servicios de Infraestructura",
     description:
       "Diseño y despliego soluciones de servicios de infraestructura tecnológica orientadas a resolver requerimientos de clientes.",
+    color: "blue",
+    tag: "Servicios",
+    icons: ["▣", "⬡"],
   },
   {
     code: "SCC.E.8",
     title: "Resolución de Problemas",
     description:
       "Resuelvo problemas desde el nivel tecnológico identificando diferentes alternativas de solución y desarrollando sistemas basados en TIC.",
+    color: "lime",
+    tag: "Soluciones",
+    icons: ["⚡", "✓"],
   },
   {
     code: "SCC.E.9",
     title: "Desarrollo Integral de Proyectos",
     description:
       "Desarrollo proyectos analizando, modelando, diseñando, evaluando, gestionando, documentando, desplegando e implementando sistemas basados en TIC.",
+    color: "magenta",
+    tag: "Proyectos",
+    icons: ["◈", "⚙"],
   },
 ];

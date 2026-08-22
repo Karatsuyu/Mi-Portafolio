@@ -10,6 +10,7 @@ import { useVideoPause } from '@/hooks/useVideoPause';
 import { SKILL_LEVELS } from '@/constants';
 import Timeline from '@/components/shared/Timeline';
 import RunicProjectModal, { RunicProject, RUNIC_PROJECTS } from './RunicProjectModal';
+import RunicCertificados from './RunicCertificados';
 import { AnimatePresence } from 'framer-motion';
 
 
@@ -628,20 +629,7 @@ const RunicPage = () => {
 
                     <section id="certificados" className="section certificates-section">
                         <div className="circuit-background" aria-hidden="true"><div className="circuit-container"></div></div>
-                        <div className="certificates-content">
-                            <h2>Certificados</h2>
-                            <p>Certificaciones y cursos completados.</p>
-                            <div className="certificates-grid">
-                                <div className="certificate-card" data-certificate="cert1" onClick={() => openModal('/path/to/cert1.png')}>
-                                    <div className="cert-inner"><div className="cert-front">
-                                        <div className="cert-icon">📜</div>
-                                        <h3>Certificado 1</h3>
-                                        <p className="cert-issuer">Plataforma educativa</p>
-                                        <p className="cert-year">2025</p>
-                                    </div></div>
-                                </div>
-                            </div>
-                        </div>
+                        <RunicCertificados />
                     </section>
 
                     <section id="contacto" className="section contact-section">

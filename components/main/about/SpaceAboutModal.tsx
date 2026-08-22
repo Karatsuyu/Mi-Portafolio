@@ -31,21 +31,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { XMarkIcon, SparklesIcon } from "@heroicons/react/24/solid";
 
 import CosmicCanvas from "./CosmicCanvas";
+import CosmicCompetencyCard from "./CosmicCompetencyCard";
 import { BIO_NAME, BIO_ROLE, BIO_PARAGRAPHS, COMPETENCIAS } from "./aboutData";
 
 export interface SpaceAboutModalProps {
   onClose: () => void;
 }
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 24, scale: 0.96 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { delay: 0.08 * i, duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
 
 export default function SpaceAboutModal({ onClose }: SpaceAboutModalProps) {
   const [mounted, setMounted] = useState(false);
@@ -180,7 +171,7 @@ export default function SpaceAboutModal({ onClose }: SpaceAboutModalProps) {
             </div>
 
             {/* ── Sección: Competencias Profesionales ───────────── */}
-            <div className="text-center mb-10">
+            <div className="text-center mb-8">
               <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
                 Competencias{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
@@ -193,42 +184,9 @@ export default function SpaceAboutModal({ onClose }: SpaceAboutModalProps) {
               </p>
             </div>
 
-            <div className="relative grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {/* Patrón de circuito de fondo, muy sutil */}
-              <div
-                className="absolute inset-0 -z-0 opacity-[0.06] pointer-events-none"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(#a855f7 1px, transparent 1px), linear-gradient(90deg, #a855f7 1px, transparent 1px)",
-                  backgroundSize: "36px 36px",
-                }}
-              />
-
+            <div className="relative grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
               {COMPETENCIAS.map((c, i) => (
-                <motion.div
-                  key={c.code}
-                  custom={i}
-                  variants={cardVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-40px" }}
-                  whileHover={{ y: -4 }}
-                  className="relative z-10 rounded-xl p-5 border border-white/10 bg-white/[0.025] hover:border-purple-400/50 hover:bg-purple-500/[0.06] transition-colors group"
-                >
-                  {/* Insignia circular con el código */}
-                  <div className="relative w-14 h-14 mb-4">
-                    <div className="absolute inset-0 rounded-full border border-purple-400/40 group-hover:border-cyan-400/60 transition-colors" />
-                    <div className="absolute inset-[3px] rounded-full border border-purple-500/20" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-[11px] font-mono font-semibold text-purple-300 group-hover:text-cyan-300 transition-colors">
-                        {c.code}
-                      </span>
-                    </div>
-                  </div>
-
-                  <h4 className="text-white font-semibold mb-2 text-[15px]">{c.title}</h4>
-                  <p className="text-gray-400 text-[13px] leading-relaxed">{c.description}</p>
-                </motion.div>
+                <CosmicCompetencyCard key={c.code} competencia={c} index={i} />
               ))}
             </div>
           </div>
