@@ -1,12 +1,15 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { slideInFromLeft, slideInFromRight, slideInFromTop } from "@/utils/motion";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import SpaceAboutModal from "@/components/main/about/SpaceAboutModal";
 
 const HeroContent = () => {
+  const [openAbout, setOpenAbout] = useState(false);
+
   return (
     <motion.div
       initial="hidden"
@@ -38,10 +41,18 @@ const HeroContent = () => {
 
         <motion.p
           variants={slideInFromLeft(0.8)}
-          className="text-lg text-gray-400 my-5 max-w-[600px]"
+          className="text-lg text-gray-400 my-5 max-w-[600px] leading-relaxed"
         >
           Soy un Ingeniero Full Stack con experiencia en desarrollo Web, Móvil y Software.
-          Especializado en React, Next.js, Node.js y tecnologías modernas del ecosistema JavaScript.
+          Especializado en React, Next.js, Node.js y tecnologías modernas del ecosistema JavaScript.{" "}
+          <button
+            type="button"
+            onClick={() => setOpenAbout(true)}
+            className="inline-flex items-center gap-1.5 font-medium text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-purple-300 to-cyan-400 hover:from-purple-300 hover:to-cyan-300 transition-all duration-300 cursor-pointer group underline decoration-purple-500/40 hover:decoration-cyan-400 underline-offset-4"
+          >
+            <span>Conoce más sobre mí</span>
+            <SparklesIcon className="w-4 h-4 text-cyan-400 inline-block transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12 group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+          </button>
         </motion.p>
 
         <motion.div
@@ -103,6 +114,11 @@ const HeroContent = () => {
           priority
         />
       </motion.div>
+
+      {/* Modal Sobre Mí */}
+      <AnimatePresence>
+        {openAbout && <SpaceAboutModal onClose={() => setOpenAbout(false)} />}
+      </AnimatePresence>
     </motion.div>
   );
 };
