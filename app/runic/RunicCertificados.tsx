@@ -19,7 +19,7 @@
  *   Runic  → SIGILOS / SELLOS MÁGICOS con anillos orbitales SVG
  */
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // ── Datos reales de certificados ─────────────────────────────
@@ -306,163 +306,322 @@ function SigilCard({ cert, onSelect }: { cert: Cert; onSelect: () => void }) {
 
 function CertModal({ cert, onClose }: { cert: Cert; onClose: () => void }) {
   const meta = CATEGORY_META[cert.category];
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
-    const fn = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", fn);
+    const handleKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
     document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", fn); document.body.style.overflow = ""; };
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
   }, [onClose]);
 
   return (
     <>
       {/* Overlay */}
       <motion.div
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         onClick={onClose}
         style={{
-          position: "fixed", inset: 0, zIndex: 1200,
+          position: "fixed",
+          inset: 0,
+          zIndex: 1200,
           background: "rgba(0,0,0,0.88)",
           backdropFilter: "blur(10px)",
         }}
       />
 
-      {/* Modal */}
+      {/* Modal Wrapper - Baja un poco el modal y permite scroll */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 30 }}
+        initial={{ opacity: 0, scale: 0.94, y: 25 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.94, y: 20 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         style={{
-          position: "fixed", inset: 0, zIndex: 1201,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          padding: "1.5rem",
+          position: "fixed",
+          inset: 0,
+          zIndex: 1201,
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          padding: "5rem 1rem 2rem",
+          overflowY: "auto",
           pointerEvents: "none",
         }}
       >
-        <div style={{
-          pointerEvents: "auto",
-          width: "100%", maxWidth: 640,
-          background: "rgba(11,8,21,0.98)",
-          border: `1px solid ${meta.color}40`,
-          borderRadius: 16,
-          boxShadow: `0 0 80px ${meta.color}20, 0 32px 80px rgba(0,0,0,0.7)`,
-          overflow: "hidden",
-          position: "relative",
-        }}>
-          {/* Línea superior */}
-          <div style={{
-            height: 2,
-            background: `linear-gradient(90deg, transparent, ${meta.color}, ${meta.color}, transparent)`,
-            boxShadow: `0 0 16px ${meta.color}`,
-          }} />
+        <div
+          className="runic-custom-scroll"
+          style={{
+            pointerEvents: "auto",
+            width: "100%",
+            maxWidth: 640,
+            maxHeight: "calc(100vh - 6.5rem)",
+            background: "rgba(11,8,21,0.98)",
+            border: `1px solid ${meta.color}40`,
+            borderRadius: 16,
+            boxShadow: `0 0 80px ${meta.color}20, 0 32px 80px rgba(0,0,0,0.85)`,
+            overflowY: "auto",
+            overflowX: "hidden",
+            position: "relative",
+            margin: "auto 0",
+            "--modal-color": meta.color,
+          } as React.CSSProperties}
+        >
+          {/* Línea superior pegajosa */}
+          <div
+            style={{
+              position: "sticky",
+              top: 0,
+              zIndex: 20,
+              height: 2,
+              background: `linear-gradient(90deg, transparent, ${meta.color}, ${meta.color}, transparent)`,
+              boxShadow: `0 0 16px ${meta.color}`,
+            }}
+          />
 
-          {/* Cabecera */}
-          <div style={{
-            padding: "1.1rem 1.4rem",
-            borderBottom: `1px solid ${meta.color}15`,
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-          }}>
+          {/* Cabecera pegajosa */}
+          <div
+            style={{
+              position: "sticky",
+              top: 2,
+              zIndex: 19,
+              background: "rgba(11,8,21,0.96)",
+              backdropFilter: "blur(12px)",
+              padding: "1rem 1.4rem",
+              borderBottom: `1px solid ${meta.color}20`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
               {/* Runa circular */}
-              <div style={{
-                width: 44, height: 44, borderRadius: "50%",
-                border: `1.5px solid ${meta.color}60`,
-                background: `${meta.color}12`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: `0 0 16px ${meta.color}40`,
-              }}>
-                <span style={{ fontFamily: "'Noto Sans Runic', serif", fontSize: "1.3rem", color: meta.color }}>
+              <div
+                style={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: "50%",
+                  border: `1.5px solid ${meta.color}60`,
+                  background: `${meta.color}12`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: `0 0 16px ${meta.color}40`,
+                  flexShrink: 0,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "'Noto Sans Runic', serif",
+                    fontSize: "1.25rem",
+                    color: meta.color,
+                  }}
+                >
                   {cert.rune}
                 </span>
               </div>
               <div>
-                <h3 style={{ color: "#fff", fontSize: "1rem", fontWeight: 700, margin: 0, lineHeight: 1.3 }}>
+                <h3
+                  style={{
+                    color: "#fff",
+                    fontSize: "0.98rem",
+                    fontWeight: 700,
+                    margin: 0,
+                    lineHeight: 1.3,
+                  }}
+                >
                   {cert.title}
                 </h3>
-                <p style={{ color: meta.color + "aa", fontSize: "0.72rem", margin: "0.15rem 0 0", fontFamily: "monospace" }}>
+                <p
+                  style={{
+                    color: meta.color + "cc",
+                    fontSize: "0.72rem",
+                    margin: "0.15rem 0 0",
+                    fontFamily: "monospace",
+                  }}
+                >
                   {cert.issuer} · {cert.platform} · {cert.year}
                 </p>
               </div>
             </div>
-            <button onClick={onClose} style={{
-              width: 30, height: 30, border: `1px solid ${meta.color}30`,
-              background: "transparent", color: "rgba(255,255,255,0.4)",
-              borderRadius: 6, cursor: "pointer", fontSize: "0.9rem",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>✕</button>
-          </div>
-
-          {/* Imagen del certificado */}
-          <div style={{
-            margin: "1rem 1.4rem",
-            borderRadius: 8, overflow: "hidden",
-            border: `1px solid ${meta.color}25`,
-            background: "#000", aspectRatio: "4/3",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={cert.imageSrc}
-              alt={cert.title}
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
-              onError={(e) => {
-                // Fallback si la imagen no existe
-                (e.target as HTMLImageElement).style.display = "none";
-                (e.target as HTMLImageElement).parentElement!.innerHTML =
-                  `<div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;color:${meta.color}40">
-                    <span style="font-family:'Noto Sans Runic',serif;font-size:3rem">${cert.rune}</span>
-                    <span style="font-size:0.75rem;font-family:monospace">Imagen no disponible</span>
-                  </div>`;
+            <button
+              onClick={onClose}
+              aria-label="Cerrar modal"
+              style={{
+                width: 32,
+                height: 32,
+                border: `1px solid ${meta.color}30`,
+                background: "rgba(255,255,255,0.04)",
+                color: "rgba(255,255,255,0.6)",
+                borderRadius: 6,
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.2s ease",
               }}
-            />
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "#fff";
+                e.currentTarget.style.borderColor = meta.color;
+                e.currentTarget.style.background = `${meta.color}20`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "rgba(255,255,255,0.6)";
+                e.currentTarget.style.borderColor = `${meta.color}30`;
+                e.currentTarget.style.background = "rgba(255,255,255,0.04)";
+              }}
+            >
+              ✕
+            </button>
           </div>
 
-          {/* Skills + SCC */}
-          <div style={{ padding: "0 1.4rem 1.1rem" }}>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginBottom: "0.75rem" }}>
-              {cert.skills.map(s => (
-                <span key={s} style={{
-                  fontSize: "0.65rem", padding: "0.2rem 0.6rem", fontFamily: "monospace",
-                  border: `1px solid ${meta.color}30`,
-                  color: meta.color + "cc",
-                  background: meta.color + "0d",
-                  borderRadius: 4,
-                }}>
+          {/* Imagen del certificado con fallback reactivo */}
+          <div
+            style={{
+              margin: "1.2rem 1.4rem",
+              borderRadius: 10,
+              overflow: "hidden",
+              border: `1px solid ${meta.color}25`,
+              background: "#05030a",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "220px",
+            }}
+          >
+            {imgError ? (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  padding: "2.5rem 1rem",
+                  gap: "0.75rem",
+                  color: `${meta.color}60`,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "'Noto Sans Runic', serif",
+                    fontSize: "3.2rem",
+                    textShadow: `0 0 24px ${meta.color}40`,
+                    color: meta.color,
+                  }}
+                >
+                  {cert.rune}
+                </span>
+                <span
+                  style={{
+                    fontSize: "0.75rem",
+                    fontFamily: "monospace",
+                    letterSpacing: "0.1em",
+                    color: "rgba(200,180,240,0.5)",
+                  }}
+                >
+                  Imagen no disponible
+                </span>
+              </div>
+            ) : (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={cert.imageSrc}
+                alt={cert.title}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  maxHeight: "380px",
+                  objectFit: "contain",
+                }}
+                onError={() => setImgError(true)}
+              />
+            )}
+          </div>
+
+          {/* Skills + SCC + Acciones */}
+          <div style={{ padding: "0 1.4rem 1.4rem" }}>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "0.4rem",
+                marginBottom: "0.85rem",
+              }}
+            >
+              {cert.skills.map((s) => (
+                <span
+                  key={s}
+                  style={{
+                    fontSize: "0.68rem",
+                    padding: "0.25rem 0.65rem",
+                    fontFamily: "monospace",
+                    border: `1px solid ${meta.color}30`,
+                    color: meta.color + "ee",
+                    background: meta.color + "10",
+                    borderRadius: 5,
+                  }}
+                >
                   {s}
                 </span>
               ))}
             </div>
 
             {cert.sccEvidencia && (
-              <div style={{
-                fontSize: "0.7rem", padding: "0.5rem 0.75rem",
-                background: `${meta.color}08`,
-                border: `1px solid ${meta.color}20`,
-                borderLeft: `3px solid ${meta.color}60`,
-                color: meta.color + "99",
-                fontFamily: "monospace",
-                borderRadius: "0 6px 6px 0",
-                marginBottom: "0.75rem",
-              }}>
+              <div
+                style={{
+                  fontSize: "0.72rem",
+                  padding: "0.55rem 0.85rem",
+                  background: `${meta.color}08`,
+                  border: `1px solid ${meta.color}25`,
+                  borderLeft: `3px solid ${meta.color}80`,
+                  color: meta.color + "cc",
+                  fontFamily: "monospace",
+                  borderRadius: "0 6px 6px 0",
+                  marginBottom: "1rem",
+                  lineHeight: 1.4,
+                }}
+              >
                 ✦ {cert.sccEvidencia}
               </div>
             )}
 
-            <div style={{ display: "flex", gap: "0.5rem" }}>
+            <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
               {cert.credentialUrl && (
-                <a href={cert.credentialUrl} target="_blank" rel="noopener noreferrer"
+                <a
+                  href={cert.credentialUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
-                    fontSize: "0.72rem", padding: "0.45rem 1rem",
-                    background: `linear-gradient(135deg, ${meta.color}30, ${meta.color}15)`,
-                    border: `1px solid ${meta.color}50`,
-                    color: meta.color,
-                    borderRadius: 6, textDecoration: "none",
-                    display: "flex", alignItems: "center", gap: "0.35rem",
+                    fontSize: "0.75rem",
+                    padding: "0.5rem 1.1rem",
+                    background: `linear-gradient(135deg, ${meta.color}35, ${meta.color}18)`,
+                    border: `1px solid ${meta.color}60`,
+                    color: "#fff",
+                    borderRadius: 6,
+                    textDecoration: "none",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.45rem",
                     fontFamily: "monospace",
-                  }}>
-                  <span style={{ fontFamily: "'Noto Sans Runic', serif" }}>ᚠ</span>
-                  Ver credencial
+                    boxShadow: `0 0 16px ${meta.color}20`,
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "'Noto Sans Runic', serif",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    ᚠ
+                  </span>
+                  Ver credencial oficial ↗
                 </a>
               )}
             </div>
@@ -486,6 +645,30 @@ export default function RunicCertificados() {
     <>
       {/* Estilos locales inyectados */}
       <style>{`
+        /* Scrollbar temática personalizada Runic */
+        .runic-custom-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: var(--modal-color, #a855f7) rgba(10, 6, 20, 0.9);
+        }
+        .runic-custom-scroll::-webkit-scrollbar {
+          width: 7px;
+        }
+        .runic-custom-scroll::-webkit-scrollbar-track {
+          background: rgba(10, 6, 20, 0.85);
+          border-radius: 8px;
+          margin: 6px 0;
+        }
+        .runic-custom-scroll::-webkit-scrollbar-thumb {
+          background: var(--modal-color, #a855f7);
+          border-radius: 8px;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          box-shadow: 0 0 10px var(--modal-color, #a855f7);
+        }
+        .runic-custom-scroll::-webkit-scrollbar-thumb:hover {
+          background: #ffffff;
+          box-shadow: 0 0 16px var(--modal-color, #a855f7);
+        }
+
         @keyframes runicRingOuter {
           from { transform: rotate(0deg); }
           to   { transform: rotate(360deg); }

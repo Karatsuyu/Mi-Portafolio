@@ -260,79 +260,23 @@ export const useDynamicEffects = () => {
         const createCircuit = () => {
             circuitContainer.innerHTML = '';
 
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 90; i++) {
                 const star = document.createElement('div');
                 star.className = 'circuit-star';
-                star.style.width = `${Math.random() * 2 + 0.5}px`;
-                star.style.height = star.style.width;
+                const size = Math.random() * 2.2 + 0.8;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
                 star.style.top = `${Math.random() * 100}%`;
                 star.style.left = `${Math.random() * 100}%`;
-                star.style.opacity = `${Math.random() * 0.5 + 0.3}`;
+                star.style.opacity = `${Math.random() * 0.7 + 0.2}`;
+                star.style.animationDelay = `${Math.random() * 4}s`;
+                star.style.animationDuration = `${Math.random() * 3 + 2}s`;
                 circuitContainer.appendChild(star);
-            }
-
-            const lines = [
-                { x1: 0, y1: 30, x2: 100, y2: 30 }, { x1: 0, y1: 70, x2: 100, y2: 70 },
-                { x1: 20, y1: 10, x2: 80, y2: 90 }, { x1: 80, y1: 10, x2: 20, y2: 90 },
-                { x1: 0, y1: 50, x2: 50, y2: 50 }, { x1: 50, y1: 50, x2: 100, y2: 50 },
-                { x1: 30, y1: 20, x2: 70, y2: 20 }, { x1: 30, y1: 80, x2: 70, y2: 80 },
-                { x1: 10, y1: 10, x2: 10, y2: 90 }, { x1: 90, y1: 10, x2: 90, y2: 90 }
-            ];
-
-            lines.forEach(line => {
-                const lineElement = document.createElement('div');
-                lineElement.className = 'circuit-line';
-                const dx = line.x2 - line.x1;
-                const dy = line.y2 - line.y1;
-                const length = Math.sqrt(dx * dx + dy * dy);
-                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                lineElement.style.width = `${length}%`;
-                lineElement.style.left = `${line.x1}%`;
-                lineElement.style.top = `${line.y1}%`;
-                lineElement.style.transform = `rotate(${angle}deg)`;
-                lineElement.style.animationDelay = `${Math.random() * 3}s`;
-                circuitContainer.appendChild(lineElement);
-            });
-
-            const nodes = [
-                { x: 50, y: 50 }, { x: 30, y: 20 }, { x: 70, y: 20 }, { x: 30, y: 80 },
-                { x: 70, y: 80 }, { x: 10, y: 50 }, { x: 90, y: 50 }, { x: 20, y: 30 },
-                { x: 80, y: 30 }, { x: 20, y: 70 }, { x: 80, y: 70 }, { x: 50, y: 30 },
-                { x: 50, y: 70 }
-            ];
-
-            nodes.forEach(node => {
-                const nodeElement = document.createElement('div');
-                nodeElement.className = 'circuit-node';
-                nodeElement.style.left = `${node.x}%`;
-                nodeElement.style.top = `${node.y}%`;
-                nodeElement.style.animationDelay = `${Math.random() * 2}s`;
-                circuitContainer.appendChild(nodeElement);
-            });
-
-            for (let i = 0; i < 10; i++) {
-                const pulse = document.createElement('div');
-                pulse.className = 'circuit-pulse';
-                pulse.style.left = `${Math.random() * 100}%`;
-                pulse.style.top = `${Math.random() * 100}%`;
-                pulse.style.animationDelay = `${Math.random() * 3}s`;
-                circuitContainer.appendChild(pulse);
-            }
-
-            for (let i = 0; i < 3; i++) {
-                const circle = document.createElement('div');
-                circle.className = 'circuit-circle';
-                circle.style.width = `${Math.random() * 200 + 100}px`;
-                circle.style.height = circle.style.width;
-                circle.style.left = `${Math.random() * 100 - 50}%`;
-                circle.style.top = `${Math.random() * 100 - 50}%`;
-                circle.style.animationDelay = `${Math.random() * 5}s`;
-                circuitContainer.appendChild(circle);
             }
         };
 
         createCircuit();
-        const intervalId = setInterval(createCircuit, 10000);
+        const intervalId = setInterval(createCircuit, 15000);
 
         return () => clearInterval(intervalId);
     }, []);

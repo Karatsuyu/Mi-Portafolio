@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import CyberSobreMiModal from '@/components/cyber/CyberSobreMiModal';
 
 const TITLES = [
   'Full Stack Developer',
@@ -22,6 +23,7 @@ export default function GlitchHero() {
   const [titleIdx, setTitleIdx]         = useState(0);
   const [isDeleting, setIsDeleting]     = useState(false);
   const [charIdx, setCharIdx]           = useState(0);
+  const [showModal, setShowModal]       = useState(false);
 
   // Typewriter loop
   useEffect(() => {
@@ -62,7 +64,8 @@ export default function GlitchHero() {
   };
 
   return (
-    <section className="cyber-hero">
+    <>
+      <section className="cyber-hero">
       <motion.div
         className="cyber-hero-text"
         variants={containerVariants}
@@ -162,7 +165,52 @@ export default function GlitchHero() {
             </div>
           ))}
         </motion.div>
+
+        {/* Trigger modal Sobre mí */}
+        <motion.div variants={itemVariants} style={{ marginTop: '1.75rem' }}>
+          <button
+            onClick={() => setShowModal(true)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.45rem 1.1rem',
+              background: 'rgba(0,245,255,0.05)',
+              border: '1px solid rgba(0,245,255,0.3)',
+              color: 'var(--cyan)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.72rem',
+              letterSpacing: '0.12em',
+              cursor: 'pointer',
+              clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))',
+              transition: 'all 0.2s ease',
+              textTransform: 'uppercase',
+              position: 'relative',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(0,245,255,0.12)';
+              e.currentTarget.style.boxShadow = '0 0 18px rgba(0,245,255,0.3)';
+              e.currentTarget.style.color = '#fff';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(0,245,255,0.05)';
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.color = 'var(--cyan)';
+            }}
+          >
+            <span style={{ color: 'rgba(0,245,255,0.6)', fontSize: '0.7rem' }}>▶</span>
+            Conoce más sobre mí
+            <span style={{ color: 'rgba(0,245,255,0.5)', fontSize: '0.65rem' }}>_</span>
+          </button>
+        </motion.div>
+
       </motion.div>
     </section>
+
+    {/* Modal IDE Sobre mí */}
+    <AnimatePresence>
+      {showModal && <CyberSobreMiModal onClose={() => setShowModal(false)} />}
+    </AnimatePresence>
+    </>
   );
 }

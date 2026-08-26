@@ -11,6 +11,7 @@ import { SKILL_LEVELS } from '@/constants';
 import Timeline from '@/components/shared/Timeline';
 import RunicProjectModal, { RunicProject, RUNIC_PROJECTS } from './RunicProjectModal';
 import RunicCertificados from './RunicCertificados';
+import RunicSobreMiModal from './RunicSobreMiModal';
 import { AnimatePresence } from 'framer-motion';
 
 
@@ -292,6 +293,7 @@ const RunicPage = () => {
     const [isCertModalOpen, setCertModalOpen] = useState(false);
     const [modalImageSrc, setModalImageSrc] = useState('');
     const [modalProject, setModalProject] = useState<RunicProject | null>(null);
+    const [showSobreMiModal, setShowSobreMiModal] = useState(false);
 
     const colorSelectorRef = useRef<HTMLLIElement>(null);
     const styleSelectorRef = useRef<HTMLLIElement>(null);
@@ -458,7 +460,19 @@ const RunicPage = () => {
                         <h1 className="hero-title">Hola, soy <span className="accent">Julián Gutierrez</span></h1>
                         <h2 className="hero-sub">Soy <span className="accent">Tecnologo en desarrollado de Software</span></h2>
                         <p className="hero-text">Soy un Tecnólogo en Desarrollo de Software formado en la Universidad del Valle, apasionado por la tecnología, la innovación y la creación de soluciones digitales que generen impacto...</p>
-                        <p className="hero-text">Durante mi formación, he adquirido conocimientos sólidos en programación estructurada y orientada a objetos, diseño de bases de datos, desarrollo web (frontend y backend)...</p>
+                        <p className="hero-text">
+                          Durante mi formación, he adquirido conocimientos sólidos en programación estructurada y orientada a objetos, diseño de bases de datos, desarrollo web (frontend y backend)...
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setShowSobreMiModal(true)}
+                          className="runic-about-trigger"
+                          title="Abrir Grimorio - Conoce más sobre mí"
+                        >
+                          <span className="runic-about-trigger-rune">ᚷ</span>
+                          <span className="runic-about-trigger-text">Conoce más sobre mí</span>
+                          <span className="runic-about-trigger-arrow">✦</span>
+                        </button>
                       </div>
                     </div>
                 </header>
@@ -675,6 +689,15 @@ const RunicPage = () => {
                         <RunicProjectModal 
                             project={modalProject} 
                             onClose={() => setModalProject(null)} 
+                        />
+                    )}
+                </AnimatePresence>
+
+                {/* Modal Grimorio / Sobre Mí Runic */}
+                <AnimatePresence>
+                    {showSobreMiModal && (
+                        <RunicSobreMiModal 
+                            onClose={() => setShowSobreMiModal(false)} 
                         />
                     )}
                 </AnimatePresence>
