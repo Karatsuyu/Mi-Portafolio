@@ -891,6 +891,25 @@ h2{margin-top:0}
      0 0 8px var(--accent-glow),
      0 0 12px var(--accent-glow);
 }
+.rune-symbol svg {
+  width: 2.6rem;
+  height: 2.6rem;
+  color: var(--accent);
+  fill: currentColor;
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+  transition: transform .3s ease;
+}
+.rune-symbol img {
+  width: 2.6rem;
+  height: 2.6rem;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+  transition: transform .3s ease;
+}
+.rune-skill:hover .rune-symbol svg,
+.rune-skill:hover .rune-symbol img {
+  transform: scale(1.1);
+}
 .rune-skill h3{color:#fff;font-family:'Poppins',sans-serif;margin-bottom:.6rem;text-shadow:0 0 8px rgba(138,43,226,0.6)}
 .skill-level{width:100%;height:8px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;margin:0.8rem 0}
 .skill-progress{height:100%;background:var(--accent);border-radius:6px;box-shadow:0 0 10px var(--accent-glow);position:relative}

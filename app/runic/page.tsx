@@ -13,6 +13,24 @@ import RunicProjectModal, { RunicProject, RUNIC_PROJECTS } from './RunicProjectM
 import RunicCertificados from './RunicCertificados';
 import RunicSobreMiModal from './RunicSobreMiModal';
 import { AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+import {
+  SiTypescript,
+  SiTailwindcss,
+  SiRedux,
+  SiMui,
+  SiFramer,
+  SiExpress,
+  SiDjango,
+  SiMongodb,
+  SiMysql,
+  SiFirebase,
+  SiGraphql,
+  SiPrisma,
+  SiStripe,
+  SiSlack,
+  SiTrello,
+} from 'react-icons/si';
 
 
 // --- SUB-COMPONENTES Y HOOKS DE LÓGICA (DEFINIDOS ANTES DE USAR) ---
@@ -627,6 +645,7 @@ const RunicPage = () => {
                         <div className="runes-container">
                             <div className="runes-header"><h1>Habilidades</h1></div>
                             <div className="skills-container">
+                                {/* ── Originales ────────────────────────────────────────── */}
                                 <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-html5"></i></div><h3>HTML5</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["HTML5"]}%`}}></div></div><p className="skill-description">Lenguaje de marcado que estructura la web moderna.</p></div>
                                 <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-css3-alt"></i></div><h3>CSS3</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["CSS3"]}%`}}></div></div><p className="skill-description">Estilos y animaciones que dan vida a interfaces.</p></div>
                                 <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-js"></i></div><h3>JavaScript</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["JavaScript"]}%`}}></div></div><p className="skill-description">Interactividad y lógica para experiencias dinámicas.</p></div>
@@ -637,6 +656,35 @@ const RunicPage = () => {
                                 <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-java"></i></div><h3>Java</h3><div className="skill-level"><div className="skill-progress" style={{width:"65%"}}></div></div><p className="skill-description">Programación orientada a objetos robusta.</p></div>
                                 <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-github"></i></div><h3>GitHub</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["GitHub"]}%`}}></div></div><p className="skill-description">Control de versiones y colaboración.</p></div>
                                 <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-docker"></i></div><h3>Docker</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Docker"]}%`}}></div></div><p className="skill-description">Containerización de aplicaciones.</p></div>
+
+                                {/* ── Frontend ──────────────────────────────────────────── */}
+                                <div className="rune-skill"><div className="rune-symbol"><SiTypescript /></div><h3>TypeScript</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["TypeScript"]}%`}}></div></div><p className="skill-description">Tipado estático para código robusto y escalable.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><Image src="/next.png" alt="Next.js" width={42} height={42} style={{ objectFit: "contain" }} /></div><h3>Next.js</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Next.js"]}%`}}></div></div><p className="skill-description">Framework full-stack con renderizado SSR y SSG.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiTailwindcss /></div><h3>Tailwind CSS</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Tailwind CSS"]}%`}}></div></div><p className="skill-description">Estilos utilitarios para interfaces modernas y rápidas.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiRedux /></div><h3>Redux</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Redux"]}%`}}></div></div><p className="skill-description">Gestión centralizada y predecible del estado global.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiMui /></div><h3>Material UI</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Material UI"]}%`}}></div></div><p className="skill-description">Biblioteca de componentes con diseño refinado.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiFramer /></div><h3>Framer Motion</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Framer Motion"]}%`}}></div></div><p className="skill-description">Animaciones interactivas y fluidas para React.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><Image src="/reactquery.png" alt="React Query" width={42} height={42} style={{ objectFit: "contain" }} /></div><h3>React Query</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["React Query"]}%`}}></div></div><p className="skill-description">Sincronización y caché de datos asíncronos eficiente.</p></div>
+
+                                {/* ── Backend ───────────────────────────────────────────── */}
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-node-js"></i></div><h3>Node.js</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Node.js"]}%`}}></div></div><p className="skill-description">Entorno de ejecución escalable en el servidor.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiExpress /></div><h3>Express</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Express"]}%`}}></div></div><p className="skill-description">Framework backend minimalista para APIs REST rápidas.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiDjango /></div><h3>Django</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Django"]}%`}}></div></div><p className="skill-description">Framework web de alto nivel con arquitectura limpia.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><Image src="/python.svg" alt="FastAPI" width={42} height={42} style={{ objectFit: "contain" }} /></div><h3>FastAPI</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["FastAPI"] ?? 75}%`}}></div></div><p className="skill-description">APIs modernas y veloces de alto rendimiento en Python.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiMongodb /></div><h3>MongoDB</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["MongoDB"]}%`}}></div></div><p className="skill-description">Base de datos NoSQL documental flexible y escalable.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiMysql /></div><h3>MySQL</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["MySQL"]}%`}}></div></div><p className="skill-description">Sistema gestor de bases de datos relacional robusto.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiFirebase /></div><h3>Firebase</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Firebase"]}%`}}></div></div><p className="skill-description">Servicios cloud en tiempo real y autenticación segura.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiGraphql /></div><h3>GraphQL</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["GraphQL"]}%`}}></div></div><p className="skill-description">Lenguaje de consulta y manipulación estructurada de APIs.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiPrisma /></div><h3>Prisma</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Prisma"]}%`}}></div></div><p className="skill-description">ORM moderno con tipado seguro y consultas optimizadas.</p></div>
+
+                                {/* ── Herramientas ──────────────────────────────────────── */}
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-git-alt"></i></div><h3>Git</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Git"]}%`}}></div></div><p className="skill-description">Control de versiones distribuido y flujo colaborativo.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><Image src="/react.png" alt="Three.js" width={42} height={42} style={{ objectFit: "contain" }} /></div><h3>Three.js</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Three.js"]}%`}}></div></div><p className="skill-description">Experiencias y gráficos interactivos 3D en el navegador.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><i className="fab fa-react"></i></div><h3>React Native</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["React Native"]}%`}}></div></div><p className="skill-description">Desarrollo de aplicaciones móviles multiplataforma nativas.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiStripe /></div><h3>Stripe</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Stripe"]}%`}}></div></div><p className="skill-description">Integración segura de pagos y facturación digital.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><Image src="/clickup.svg" alt="ClickUp" width={42} height={42} style={{ objectFit: "contain" }} /></div><h3>ClickUp</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["ClickUp"] ?? 85}%`}}></div></div><p className="skill-description">Gestión integral de proyectos y flujos ágiles de trabajo.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiSlack /></div><h3>Slack</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Slack"]}%`}}></div></div><p className="skill-description">Colaboración y comunicación efectiva en equipos técnicos.</p></div>
+                                <div className="rune-skill"><div className="rune-symbol"><SiTrello /></div><h3>Trello</h3><div className="skill-level"><div className="skill-progress" style={{width:`${SKILL_LEVELS["Trello"]}%`}}></div></div><p className="skill-description">Organización visual de tareas mediante metodología Kanban.</p></div>
                             </div>
                         </div>
                     </section>
