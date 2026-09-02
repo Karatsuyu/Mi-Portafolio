@@ -13,7 +13,7 @@ const SKILL_GROUPS = [
     color: "#b49bff",
     glow: "rgba(180,155,255,0.4)",
     skills: UNIFIED_SKILLS.frontend.filter(s => 
-      ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML5", "CSS3", "Redux", "Framer Motion"].includes(s.name)
+      ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML5", "CSS3"].includes(s.name)
     ).map(s => ({ name: s.name, level: s.level, icon: s.icon })),
   },
   {

@@ -71,7 +71,7 @@ export default function ClassicLayout({ children }: { children: React.ReactNode 
               </Link>
             </li>
             <li>
-              <button id="themeToggle" className="nav-link" style={{ width: "100%", background: "none", border: "none", cursor: "pointer" }}>
+              <button id="themeToggle" className="nav-link" style={{ width: "100%", background: "none", border: "none", outline: "none", boxShadow: "none", cursor: "pointer" }}>
                 <i className="fas fa-sun icon" />
                 <span className="text">Modo Día</span>
               </button>
@@ -80,7 +80,7 @@ export default function ClassicLayout({ children }: { children: React.ReactNode 
               <button
                 className="nav-link"
                 id="styleToggleBtn"
-                style={{ width: "100%", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "10px" }}
+                style={{ width: "100%", background: "none", border: "none", outline: "none", boxShadow: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "10px" }}
               >
                 <i className="fas fa-palette icon" />
                 <span className="text" style={{ position: "relative" }}>

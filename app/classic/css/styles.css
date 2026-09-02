@@ -255,6 +255,8 @@ body {
   z-index: 100;
   overflow-y: auto; /* Agregar scroll vertical */
   overflow-x: hidden; /* Ocultar scroll horizontal */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 0, 149, 0.4) transparent;
 }
 
 .sidebar:hover {
@@ -262,6 +264,46 @@ body {
   background: rgba(0,0,0,0.25);
   border: 1px solid var(--primary);
   border-radius: 10px;
+}
+
+/* Scrollbar personalizado para el menú lateral */
+.sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 0, 149, 0.35);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.sidebar:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 0, 149, 0.6);
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--primary, #ff0095);
+  box-shadow: 0 0 8px var(--primary, #ff0095);
+}
+
+body[data-theme="light"] .sidebar {
+  scrollbar-color: rgba(0, 110, 255, 0.4) transparent;
+}
+
+body[data-theme="light"] .sidebar::-webkit-scrollbar-thumb {
+  background: rgba(0, 110, 255, 0.35);
+}
+
+body[data-theme="light"] .sidebar:hover::-webkit-scrollbar-thumb {
+  background: rgba(0, 110, 255, 0.6);
+}
+
+body[data-theme="light"] .sidebar::-webkit-scrollbar-thumb:hover {
+  background: #006eff;
 }
 
 .profile {
@@ -287,7 +329,7 @@ body {
   height: 60px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   border: 2px solid var(--primary);
 }
 
@@ -296,24 +338,30 @@ body {
   visibility: hidden;
   transition: var(--transition);
   white-space: nowrap;
-  overflow: hidden;
 }
 
-.sidebar:hover .name,
+.sidebar:hover .name {
+  opacity: 1;
+  visibility: visible;
+  margin-top: 3px;
+}
+
 .sidebar:hover .title {
   opacity: 1;
   visibility: visible;
-  margin-top: 8px;
+  margin-top: 1px;
 }
 
 .name {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
+  line-height: 1.25;
 }
 
 .title {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--gray);
+  line-height: 1.3;
 }
 
 .nav-menu ul {
@@ -328,6 +376,28 @@ body {
   text-decoration: none;
   color: #ffffff;
   transition: var(--transition);
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.nav-link:focus,
+.nav-link:focus-visible,
+.nav-link:active,
+#themeToggle,
+#themeToggle:focus,
+#themeToggle:focus-visible,
+#themeToggle:active,
+#styleToggleBtn,
+#styleToggleBtn:focus,
+#styleToggleBtn:focus-visible,
+#styleToggleBtn:active {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .nav-link:hover {

@@ -279,9 +279,9 @@ export const Skill_data = [
     backend: [
       { name: "Node.js", level: 85, years: 3, icon: "/node-js.png", category: "Backend" },
       { name: "Express", level: 82, years: 2.5, icon: "/express.png", category: "Backend" },
-      { name: "Python", level: 88, years: 4, icon: "/go.png", category: "Backend" }, // Usar icono correcto
-      { name: "Django", level: 80, years: 2, icon: "/go.png", category: "Backend" },
-      { name: "FastAPI", level: 75, years: 1.5, icon: "/go.png", category: "Backend" },
+      { name: "Python", level: 88, years: 4, icon: "/python.svg", category: "Backend" },
+      { name: "Django", level: 80, years: 2, icon: "/django.svg", category: "Backend" },
+      { name: "FastAPI", level: 75, years: 1.5, icon: "/python.svg", category: "Backend" },
       { name: "PostgreSQL", level: 78, years: 2.5, icon: "/postger.png", category: "Backend" },
       { name: "MongoDB", level: 80, years: 2, icon: "/mongodb.png", category: "Backend" },
       { name: "MySQL", level: 75, years: 2, icon: "/mysql.png", category: "Backend" },
@@ -297,8 +297,9 @@ export const Skill_data = [
       { name: "Three.js", level: 70, years: 1, icon: "/react.png", category: "3D" },
       { name: "React Native", level: 70, years: 1.5, icon: "/ReactNative .png", category: "Mobile" },
       { name: "Stripe", level: 68, years: 1, icon: "/stripe.webp", category: "Pagos" },
-      { name: "Tauri", level: 45, years: 0.5, icon: "/tauri.svg", category: "Desktop" },
-      { name: "Go", level: 40, years: 0.5, icon: "/go.png", category: "Lenguajes" },
+      { name: "ClickUp", level: 85, years: 2, icon: "/clickup.svg", category: "Gestión" },
+      { name: "Slack", level: 90, years: 3, icon: "/slack.svg", category: "Comunicación" },
+      { name: "Trello", level: 88, years: 3, icon: "/trello.svg", category: "Gestión" },
     ],
   } as const;
   
@@ -336,8 +337,9 @@ export const Skill_data = [
     "Three.js": 70,
     "React Native": 70,
     "Stripe": 68,
-    "Tauri": 45,
-    "Go": 40,
+    "ClickUp": 85,
+    "Slack": 90,
+    "Trello": 88,
   } as const;
   
   
