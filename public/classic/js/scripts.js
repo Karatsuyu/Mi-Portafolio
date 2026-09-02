@@ -289,11 +289,11 @@
     (function initSkillProgress(){
       const cards = qsa('.flip-card');
       cards.forEach(card=>{
+        const back = qs('.flip-card-back', card);
+        if(!back || qs('.skill-progress', back)) return;
         const percent = Number(card.getAttribute('data-percent') || '0');
         const color = card.getAttribute('data-color') || getComputedStyle(document.body).getPropertyValue('--primary') || '#ff0095';
         const label = card.getAttribute('data-label') || '';
-        const back = qs('.flip-card-back', card);
-        if(!back) return;
         
         // The length of a semi-circle with radius 80 is π * 80 ≈ 251.3. We'll use 252.
         const semiCircleLength = 252;

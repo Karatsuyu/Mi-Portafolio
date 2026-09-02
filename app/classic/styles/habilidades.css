@@ -79,7 +79,7 @@
 
 .skill-progress svg { 
     width: 160px; 
-    height: 87px; 
+    height: 90px; 
 }
 
 .skill-progress .bg { 
@@ -93,7 +93,8 @@
     fill: none; 
     stroke-width: 14; 
     stroke-linecap: round; 
-    transition: stroke-dashoffset 1.5s ease; 
+    stroke-dasharray: 252;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.25, 1, 0.5, 1); 
 }
 
 .skill-progress .info { 
